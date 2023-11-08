@@ -11,13 +11,13 @@ Parâmetros de entrada:
     <instâncias pequenas> = unidade numérica
     <pontos demanda instâncias pequenas> = unidade numérica
     <locais candidatos instâncias pequenas> = unidade numérica
-    <instâncias pequenas> = unidade numérica
+    <instâncias grandes> = unidade numérica
     <pontos demanda instâncias grandes> = unidade numérica
     <locais candidatos instâncias grandes> = unidade numérica
 
 Uso: 
 
-    python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias pequenas> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>
+    python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias grandes> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>
 
 Exemplo: 
 
