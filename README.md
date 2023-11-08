@@ -1,6 +1,6 @@
 # Gerador de Instâncias
 
-Gerador de instâncias cria obrigatóriamente dois modelos de instâncias: grandes e pequenas, ambas com parâmetros configuráveis pelo usuário.
+Gerador de instâncias cria dois modelos de instâncias: grandes e pequenas, ambas com parâmetros configuráveis pelo usuário.
 
 Uso: 
 
@@ -10,7 +10,7 @@ Exemplo:
 
     python geradorInstancia.py 33000 30000 7000 10000 5 10 10 5 700 700
 
-Executando o comando acima, serão gerados dois grupos de instancias, pequenas e grandes.
+Executando pelo terminal o comando do exemplo acima, serão gerados dois grupos de instâncias, pequenas e grandes.
 
 As intâncias serão criadas no caminho *.../métodos_quantitativos/instancias* e estarão ordenadas pelo nome, exemplo:
 
@@ -25,7 +25,7 @@ As intâncias serão criadas no caminho *.../métodos_quantitativos/instancias* 
     instanciaPequena4.txt
     instanciaPequena5.txt
 
-instanciaPequena1.txt:
+Usando de exemplo o conteúdo de instanciaPequena1.txt:
 
     A 10 B 10 C 7000 D 10000
     n 26788 8132
@@ -60,4 +60,4 @@ Definições:
 
 Os valores m e n são gerados aleatoriamente respeitando os valores de comprimento e largura especificados.
 
-Cada execução do gerador de instancias exclui as instancias existentes e gera novos arquivos .txt
+Cada execução do gerador de instancias exclui as instâncias existentes da pasta e gera novos arquivos .txt
