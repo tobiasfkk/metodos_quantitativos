@@ -1,1 +1,63 @@
-# metodos_quantitativos
+# Gerador de Instâncias
+
+Gerador de instâncias cria obrigatóriamente dois modelos de instâncias: grandes e pequenas, ambas com parâmetros configuráveis pelo usuário.
+
+Uso: 
+
+    python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <qtd instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <qtd instâncias pequenas> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>
+
+Exemplo: 
+
+    python geradorInstancia.py 33000 30000 7000 10000 5 10 10 5 700 700
+
+Executando o comando acima, serão gerados dois grupos de instancias, pequenas e grandes.
+
+As intâncias serão criadas no caminho *.../métodos_quantitativos/instancias* e estarão ordenadas pelo nome, exemplo:
+
+    instanciaGrande1.txt
+    instanciaGrande2.txt
+    instanciaGrande3.txt
+    instanciaGrande4.txt
+    instanciaGrande5.txt
+    instanciaPequena1.txt
+    instanciaPequena2.txt
+    instanciaPequena3.txt
+    instanciaPequena4.txt
+    instanciaPequena5.txt
+
+instanciaPequena1.txt:
+
+    A 10 B 10 C 7000 D 10000
+    n 26788 8132
+    n 22363 20166
+    n 30812 3771
+    n 14762 29883
+    n 21769 4274
+    n 15873 7925
+    n 5537 12268
+    n 21405 11142
+    n 29449 6580
+    n 2395 28331
+    m 6999 16544
+    m 14925 1992
+    m 8608 12367
+    m 13679 26235
+    m 24312 11078
+    m 9131 3976
+    m 11523 120
+    m 18744 28332
+    m 19392 11397
+    m 11924 15064
+
+Definições:
+    
+    A = Quantidade de locais candidatos
+    B = Quantidade de pontos de demanda
+    C = Custo das antenas
+    D = Alcance das antenas
+    n = <Coordenada x do ponto de demanda> <Coordenada y do ponto de demanda>
+    m = <Coordenada x do local candidato> <Coordenada y do local candidato>
+
+Os valores m e n são gerados aleatoriamente respeitando os valores de comprimento e largura especificados.
+
+Cada execução do gerador de instancias exclui as instancias existentes e gera novos arquivos .txt
