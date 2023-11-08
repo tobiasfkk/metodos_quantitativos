@@ -2,6 +2,19 @@
 
 Gerador de instâncias cria dois modelos de instâncias: grandes e pequenas, ambas com parâmetros configuráveis pelo usuário.
 
+Parâmetros de entrada:
+
+    <comprimento da área> = quilômetro
+    <largura da área> = quilômetro
+    <custo das antenas> = moeda (real por exemplo)
+    <alcance das antenas> = quilômetro
+    <qtd instâncias pequenas> = unidade numérica
+    <pontos demanda instâncias pequenas> = unidade numérica
+    <locais candidatos instâncias pequenas> = unidade numérica
+    <qtd instâncias pequenas> = unidade numérica
+    <pontos demanda instâncias grandes> = unidade numérica
+    <locais candidatos instâncias grandes> = unidade numérica
+
 Uso: 
 
     python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <qtd instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <qtd instâncias pequenas> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>
