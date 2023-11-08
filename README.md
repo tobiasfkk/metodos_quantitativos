@@ -1,6 +1,6 @@
 # Gerador de Instâncias
 
-Gerador de instâncias cria dois modelos de instâncias: grandes e pequenas, ambas com parâmetros configuráveis pelo usuário.
+Gerador de instâncias cria dois modelos de instâncias: grandes e pequenas, ambas em formato txt e com parâmetros de entrada configuráveis pelo usuário.
 
 Parâmetros de entrada:
 
@@ -73,4 +73,4 @@ Definições:
 
 Os valores m e n são gerados aleatoriamente respeitando os valores de comprimento e largura especificados.
 
-Cada execução do gerador de instancias exclui as instâncias existentes da pasta e gera novos arquivos .txt
+Cada execução do gerador exclui as instâncias existentes da pasta e gera novos arquivos .txt.
