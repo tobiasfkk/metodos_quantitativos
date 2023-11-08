@@ -8,16 +8,16 @@ Parâmetros de entrada:
     <largura da área> = quilômetro
     <custo das antenas> = moeda (real por exemplo)
     <alcance das antenas> = quilômetro
-    <qtd instâncias pequenas> = unidade numérica
+    <instâncias pequenas> = unidade numérica
     <pontos demanda instâncias pequenas> = unidade numérica
     <locais candidatos instâncias pequenas> = unidade numérica
-    <qtd instâncias pequenas> = unidade numérica
+    <instâncias pequenas> = unidade numérica
     <pontos demanda instâncias grandes> = unidade numérica
     <locais candidatos instâncias grandes> = unidade numérica
 
 Uso: 
 
-    python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <qtd instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <qtd instâncias pequenas> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>
+    python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias pequenas> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>
 
 Exemplo: 
 
