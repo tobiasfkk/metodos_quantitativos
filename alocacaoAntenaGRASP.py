@@ -1,5 +1,6 @@
 import sys
 from glob import glob
+import random
 
 instancia = sys.argv[1]
 
@@ -38,7 +39,7 @@ def read_instance(instance):
 def distance(i, j):
     return ((mx[i] - nx[j]) ** 2 + (my[i] - ny[j]) ** 2) ** 0.5
 
- # def solveGRASP():
+# def solve():
 #     n = B
 #     m = A
 #     P = 999999  # penalty
@@ -102,22 +103,91 @@ def distance(i, j):
 #     print(f"Número de Pontos Não Atendidos: {unattended_demand}")
 #     return 1
 
+def construcaoSemiGulosa(alpha):
+
+    A0 = list(range(A))
+    A1 = []
+    f = 0
+
+    while A0:
+        # Determina o tamanho do conjunto de candidatos restritos
+        p = max(1, int(alpha * len(A0)))
+
+        # Calcula pontuações para todas as facilidades em A0
+        scores = [calculate_score(j, A1, nx, ny, mx, my, D) for j in A0]
+
+        # Ordena A0 com base nas pontuações em ordem decrescente
+        sorted_indices = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True)
+        A0_sorted = [A0[i] for i in sorted_indices]
+
+        # Seleciona aleatoriamente uma facilidade do conjunto de candidatos restritos
+        j = random.choice(A0_sorted[:p])
+
+        # Adiciona j em A1 e remove de A0
+        A1.append(j)
+        A0.remove(j)
+
+        # Atualiza a função objetivo
+        f += calculate_score(j, A1, nx, ny, mx, my, D)
+
+    return A1, f
+
+def calculate_score(j, A1, nx, ny, mx, my, D):
+    # Pondera a pontuação ao adicionar a facilidade j em A1
+    score = 0
+    for i in range(len(nx)):
+        if i not in A1:
+            distance_val = distance(i, j)
+            if distance_val <= D:
+                score += 1 / distance_val  # Ponderação inversamente proporcional à distância
+    return score
+
 # Laço de Instâncias desejadas:
 
 isEntrou = False
 
-if instancia == 'T' or instancia == 't': # Testa todas as instâncias
+# if instancia == 'T' or instancia == 't': # Testa todas as instâncias
+#     for instance in glob('./instancias/*'):
+#         read_instance(instance)
+#         print(instance[instance.rindex('/') + 1:] + ': ', end='')
+#         isEntrou = True
+#         # solve()
+# else:
+#     for instance in glob(f'./instancias/{instancia}'): # Testa apenas instância informada
+#         read_instance(instance)
+#         print(instance[instance.rindex('/') + 1:] + ': ', end='')
+#         isEntrou = True
+#         # solve()
+
+
+if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
+
+        # Chamada da heurística construtiva semi-gulosa
+        alpha = 0.5  # Ajuste o valor de alpha conforme necessário
+        A1, f_value = construcaoSemiGulosa(alpha)
+
+        # Mostra os resultados
+        print("Solução Construída:", A1)
+        print("Valor da Função Objetivo:", f_value)
+        print("-------------")
         isEntrou = True
-        # solveGRASP()
 else:
-    for instance in glob(f'./instancias/{instancia}'): # Testa apenas instância informada
+    for instance in glob(f'./instancias/{instancia}'):
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
+
+        # Chamada da heurística construtiva semi-gulosa
+        alpha = 0.5  # Ajuste o valor de alpha conforme necessário
+        A1, f_value = construcaoSemiGulosa(alpha)
+
+        # Mostra os resultados
+        print("Solução Construída:", A1)
+        print("Valor da Função Objetivo:", f_value)
+        print("-------------")
         isEntrou = True
-        # solveGRASP()
 
 if isEntrou == False:
     print('Instância informada não existe!')
