@@ -76,8 +76,8 @@ Os valores m e n são gerados aleatoriamente respeitando os valores de comprimen
 Cada execução do gerador exclui as instâncias existentes da pasta e gera novos arquivos .txt.
 
 
-# Resolvendo instância(s) - Heurística GRASP
-
+# Aplicando GRASP na(s) instância(s)
+ 
 Uso:
     
 - Aplicando heurística GRASP em uma instância específica:
@@ -96,6 +96,6 @@ Exemplo:
 
       python alocacaoAntenaGRASP T 
 
-Lembrando que só é possível aplicar a heurística nas instâncias do caminho:
+Lembrando que só é possível aplicar a heurística nas instâncias presentes no caminho:
 
     .../métodos_quantitativos/instancias

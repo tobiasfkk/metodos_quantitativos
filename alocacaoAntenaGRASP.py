@@ -38,7 +38,7 @@ def read_instance(instance):
 def distance(i, j):
     return ((mx[i] - nx[j]) ** 2 + (my[i] - ny[j]) ** 2) ** 0.5
 
-# def solve():
+ # def solveGRASP():
 #     n = B
 #     m = A
 #     P = 999999  # penalty
@@ -100,26 +100,27 @@ def distance(i, j):
 #     # Número de Pontos não atendidos
 #     unattended_demand = sum(1 - model.b[i]() for i in range(B))
 #     print(f"Número de Pontos Não Atendidos: {unattended_demand}")
-
+#     return 1
 
 # Laço de Instâncias desejadas:
 
 isEntrou = False
 
-if instancia == 'T' or instancia == 't':
+if instancia == 'T' or instancia == 't': # Testa todas as instâncias
     for instance in glob('./instancias/*'):
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
         isEntrou = True
-        # solve()
+        # solveGRASP()
 else:
-    for instance in glob(f'./instancias/{instancia}'):
+    for instance in glob(f'./instancias/{instancia}'): # Testa apenas instância informada
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
         isEntrou = True
-        # solve()
+        # solveGRASP()
 
 if isEntrou == False:
     print('Instância informada não existe!')
-    print('Uso: "python alocacaoAntenaGRASP <nome da instancia>.txt" caso deseje testar uma instância específica ou informe "python alocacaoAntenaGRASP T" para testar todas as instâncias!')
+    print('Aplicar GRASP em uma instância específica use: python alocacaoAntenaGRASP <nome da instancia>.txt')
+    print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP T')
     sys.exit(1)
