@@ -103,37 +103,7 @@ def distance(i, j):
 #     print(f"Número de Pontos Não Atendidos: {unattended_demand}")
 #     return 1
 
-def construcaoSemiGulosa(alpha):
-
-    A0 = list(range(A))
-    A1 = []
-    f = 0
-
-    while A0:
-        # Determina o tamanho do conjunto de candidatos restritos
-        p = max(1, int(alpha * len(A0)))
-
-        # Calcula pontuações para todas as facilidades em A0
-        scores = [calculate_score(j, A1, nx, ny, mx, my, D) for j in A0]
-
-        # Ordena A0 com base nas pontuações em ordem decrescente
-        sorted_indices = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True)
-        A0_sorted = [A0[i] for i in sorted_indices]
-
-        # Seleciona aleatoriamente uma facilidade do conjunto de candidatos restritos
-        j = random.choice(A0_sorted[:p])
-
-        # Adiciona j em A1 e remove de A0
-        A1.append(j)
-        A0.remove(j)
-
-        # Atualiza a função objetivo
-        f += calculate_score(j, A1, nx, ny, mx, my, D)
-
-    return A1, f
-
 def calculate_score(j, A1, nx, ny, mx, my, D):
-    # Pondera a pontuação ao adicionar a facilidade j em A1
     score = 0
     for i in range(len(nx)):
         if i not in A1:
@@ -142,23 +112,68 @@ def calculate_score(j, A1, nx, ny, mx, my, D):
                 score += 1 / distance_val  # Ponderação inversamente proporcional à distância
     return score
 
+def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
+    while True:
+        melhorou = False
+
+        for j_em_A1 in A1:
+            for j_em_A0 in set(range(A)) - set(A1):
+                A1_temp = A1.copy()
+                A1_temp.remove(j_em_A1)
+                A1_temp.append(j_em_A0)
+
+                nova_f_value = f_value - calculate_score(j_em_A1, A1_temp, nx, ny, mx, my, D)
+                nova_f_value += calculate_score(j_em_A0, A1_temp, nx, ny, mx, my, D)
+
+                if nova_f_value > f_value:
+                    A1 = A1_temp
+                    f_value = nova_f_value
+                    melhorou = True
+
+        if not melhorou:
+            break
+
+    return A1, f_value
+
+def construcaoSemiGulosaComBuscaLocal(alpha):
+    A0 = list(range(A))
+    A1 = []
+    f = 0
+
+    while A0:
+        p = max(1, int(alpha * len(A0)))
+        scores = [calculate_score(j, A1, nx, ny, mx, my, D) for j in A0]
+        sorted_indices = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True)
+        A0_sorted = [A0[i] for i in sorted_indices]
+        j = random.choice(A0_sorted[:p])
+        A1.append(j)
+        A0.remove(j)
+        f += calculate_score(j, A1, nx, ny, mx, my, D)
+
+    A1, f = busca_local_simples(A1, f, nx, ny, mx, my, D)
+
+    return A1, f
+
+def print_allocation(A1, nx, ny, mx, my, D):
+    print("Resultado da Alocação das Antenas:")
+    for j in range(A):
+        if j in A1:
+            print(f'Antena {j + 1}: Alocada')
+        else:
+            print(f'Antena {j + 1}: Não Alocada')
+
+    print("\nResultado da Cobertura dos Pontos de Demanda:")
+    for i in range(B):
+        covered = any(distance(j, i) <= D for j in A1)
+        if covered:
+            print(f'Ponto de demanda {i + 1}: Atendido')
+        else:
+            print(f'Ponto de demanda {i + 1}: Não Atendido')
+
+
 # Laço de Instâncias desejadas:
 
 isEntrou = False
-
-# if instancia == 'T' or instancia == 't': # Testa todas as instâncias
-#     for instance in glob('./instancias/*'):
-#         read_instance(instance)
-#         print(instance[instance.rindex('/') + 1:] + ': ', end='')
-#         isEntrou = True
-#         # solve()
-# else:
-#     for instance in glob(f'./instancias/{instancia}'): # Testa apenas instância informada
-#         read_instance(instance)
-#         print(instance[instance.rindex('/') + 1:] + ': ', end='')
-#         isEntrou = True
-#         # solve()
-
 
 if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
@@ -167,11 +182,13 @@ if instancia == 'T' or instancia == 't':
 
         # Chamada da heurística construtiva semi-gulosa
         alpha = 0.5  # Ajuste o valor de alpha conforme necessário
-        A1, f_value = construcaoSemiGulosa(alpha)
+        A1, f_value = construcaoSemiGulosaComBuscaLocal(alpha)
 
         # Mostra os resultados
         print("Solução Construída:", A1)
         print("Valor da Função Objetivo:", f_value)
+        # Adiciona a impressão da alocação
+        print_allocation(A1, nx, ny, mx, my, D)
         print("-------------")
         isEntrou = True
 else:
@@ -181,11 +198,13 @@ else:
 
         # Chamada da heurística construtiva semi-gulosa
         alpha = 0.5  # Ajuste o valor de alpha conforme necessário
-        A1, f_value = construcaoSemiGulosa(alpha)
+        A1, f_value = construcaoSemiGulosaComBuscaLocal(alpha)
 
         # Mostra os resultados
         print("Solução Construída:", A1)
         print("Valor da Função Objetivo:", f_value)
+        # Adiciona a impressão da alocação
+        print_allocation(A1, nx, ny, mx, my, D)
         print("-------------")
         isEntrou = True
 
