@@ -103,12 +103,21 @@ def distance(i, j):
 
 
 # Laço de Instâncias desejadas:
+isEntrou = False
+
 if instancia == '':
-    for instance in glob('./instancias'):
+    for instance in glob('./instancias/*'): #naop funciona
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
+        isEntrou = True
+        # solve()
 else:
     for instance in glob(f'./instancias/{instancia}.txt'):
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
-    # solve()
+        isEntrou = True
+        # solve()
+
+if isEntrou == False:
+    print('Instância informada não existe!')
+    sys.exit(1)

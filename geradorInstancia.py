@@ -2,13 +2,10 @@ import random
 import sys
 import os
 
-isErro = False
-
 # Certifica de que foram fornecidos exatamente 10 argumentos
 if len(sys.argv) != 11:
     print("Parametros de entrada fornecidos incorretamente!")
     print("Uso: python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias grandes> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>")
-    isErro = True
     sys.exit(1)
 
 # Recebe valores de entrada
@@ -27,7 +24,6 @@ locaisCandidatosIntanciasGrandes = int(sys.argv[10]) #700
 if comprimento <= 0 or largura <= 0 or custo <= 0 or alcance <= 0 or qtdIntanciasPequenas <= 0 or pontosDemandaIntanciasPequenas <= 0 or locaisCandidatosIntanciasPequenas <= 0 or qtdIntanciasGrandes <= 0 or pontosDemandaIntanciasGrandes <= 0 or locaisCandidatosIntanciasGrandes <= 0:
     print("Os valores de entrada devem ser todos positivos!")
     print("Uso: python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias grandes> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>")
-    isErro = True
     sys.exit(1)
 
 def geraInstancia(file_name, pontosDemanda, locaisCandidatos):
