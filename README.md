@@ -80,7 +80,7 @@ Cada execução do gerador exclui as instâncias existentes da pasta e gera novo
  
 Uso:
     
-- Aplicando heurística GRASP em uma instância específica:
+- Aplicando heurística GRAS em uma instância específica:
 
       python alocacaoAntenaGRASP <nome da instancia>.txt" 
 - Aplicando heurística GRASP em todas as instâncias:
