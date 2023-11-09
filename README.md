@@ -74,3 +74,28 @@ Definições:
 Os valores m e n são gerados aleatoriamente respeitando os valores de comprimento e largura especificados.
 
 Cada execução do gerador exclui as instâncias existentes da pasta e gera novos arquivos .txt.
+
+
+# Resolvendo instância(s) - Heurística GRASP
+
+Uso:
+    
+- Aplicando heurística GRASP em uma instância específica:
+
+      python alocacaoAntenaGRASP <nome da instancia>.txt" 
+- Aplicando heurística GRASP em todas as instâncias:
+
+      python alocacaoAntenaGRASP T 
+
+Exemplo:
+    
+- Aplicando heurística GRASP em uma instância específica:
+
+      python alocacaoAntenaGRASP instanciaPequena1.txt
+- Aplicando heurística GRASP em todas as instâncias:
+
+      python alocacaoAntenaGRASP T 
+
+Lembrando que só é possível aplicar a heurística nas instâncias do caminho:
+
+    .../métodos_quantitativos/instancias

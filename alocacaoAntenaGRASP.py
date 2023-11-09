@@ -103,16 +103,17 @@ def distance(i, j):
 
 
 # Laço de Instâncias desejadas:
+
 isEntrou = False
 
-if instancia == '':
-    for instance in glob('./instancias/*'): #naop funciona
+if instancia == 'T' or instancia == 't':
+    for instance in glob('./instancias/*'):
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
         isEntrou = True
         # solve()
 else:
-    for instance in glob(f'./instancias/{instancia}.txt'):
+    for instance in glob(f'./instancias/{instancia}'):
         read_instance(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
         isEntrou = True
@@ -120,4 +121,5 @@ else:
 
 if isEntrou == False:
     print('Instância informada não existe!')
+    print('Uso: "python alocacaoAntenaGRASP <nome da instancia>.txt" caso deseje testar uma instância específica ou informe "python alocacaoAntenaGRASP T" para testar todas as instâncias!')
     sys.exit(1)
