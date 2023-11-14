@@ -3,6 +3,7 @@ from glob import glob
 import random
 
 instancia = sys.argv[1]
+percentualGulosidade = float(sys.argv[2])
 
 A = None # Quantidade de locais candidatos
 B = None # Quantidade de pontos de demanda
@@ -105,7 +106,7 @@ def distance(i, j):
 
 def calculate_score(j, A1, nx, ny, mx, my, D):
     score = 0
-    for i in range(len(nx)):
+    for i in range(len(nx)): #passa por todos os pontos de demanda
         if i not in A1:
             distance_val = distance(i, j)
             if distance_val <= D:
@@ -135,13 +136,15 @@ def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
 
     return A1, f_value
 
-def construcaoSemiGulosaComBuscaLocal(alpha):
+def construcaoSemiGulosaComBuscaLocal(percentualGulosidade):
     A0 = list(range(A))
     A1 = []
     f = 0
 
     while A0:
-        p = max(1, int(alpha * len(A0)))
+        # p = max(1, int(percentualGulosidade * len(A0)))
+        p = int(percentualGulosidade * len(A0)) #valor p é definido de acordo com o percentual de gulosidade - qtd de itens de A0 q serão achados de forma gulosa
+
         scores = [calculate_score(j, A1, nx, ny, mx, my, D) for j in A0]
         sorted_indices = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True)
         A0_sorted = [A0[i] for i in sorted_indices]
@@ -181,9 +184,8 @@ if instancia == 'T' or instancia == 't':
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
 
         # Chamada da heurística construtiva semi-gulosa
-        alpha = 0.5  # Ajuste o valor de alpha conforme necessário
-        A1, f_value = construcaoSemiGulosaComBuscaLocal(alpha)
-
+       
+        A1, f_value = construcaoSemiGulosaComBuscaLocal(percentualGulosidade)
         # Mostra os resultados
         print("Solução Construída:", A1)
         print("Valor da Função Objetivo:", f_value)
@@ -197,8 +199,7 @@ else:
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
 
         # Chamada da heurística construtiva semi-gulosa
-        alpha = 0.5  # Ajuste o valor de alpha conforme necessário
-        A1, f_value = construcaoSemiGulosaComBuscaLocal(alpha)
+        A1, f_value = construcaoSemiGulosaComBuscaLocal(percentualGulosidade)
 
         # Mostra os resultados
         print("Solução Construída:", A1)
@@ -210,6 +211,6 @@ else:
 
 if isEntrou == False:
     print('Instância informada não existe!')
-    print('Aplicar GRASP em uma instância específica use: python alocacaoAntenaGRASP <nome da instancia>.txt')
-    print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP T')
+    print('Aplicar GRASP em uma instância específica use: python alocacaoAntenaGRASP <nome da instancia>.txt <percentual de gulosidade, valor entre 0 e 1>')
+    print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP <T> <percentual de gulosidade, valor entre 0 e 1>')
     sys.exit(1)

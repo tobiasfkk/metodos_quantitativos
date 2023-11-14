@@ -82,20 +82,26 @@ Uso:
     
 - Aplicando heurística GRASP em uma instância específica:
 
-      python alocacaoAntenaGRASP <nome da instancia>.txt" 
+      python alocacaoAntenaGRASP <nome da instancia>.txt <percentual de gulosidade> 
 - Aplicando heurística GRASP em todas as instâncias:
 
-      python alocacaoAntenaGRASP T 
+      python alocacaoAntenaGRASP T <percentual de gulosidade> 
 
 Exemplo:
     
 - Aplicando heurística GRASP em uma instância específica:
 
-      python alocacaoAntenaGRASP instanciaPequena1.txt
+      python alocacaoAntenaGRASP instanciaPequena1.txt 0.5
+
 - Aplicando heurística GRASP em todas as instâncias:
 
-      python alocacaoAntenaGRASP T 
+      python alocacaoAntenaGRASP T 0.5
 
 Lembrando que só é possível aplicar a heurística nas instâncias presentes no caminho:
 
     .../métodos_quantitativos/instancias
+
+Parâmetros de entrada:
+
+    <nome da instância> = nome do arquivo texto localizado no caminho .../métodos_quantitativos/instancias
+    <percentual de gulosidade> = percentual da gulosidade para aplicada na heurística construtiva - valor entre 0 e 1
