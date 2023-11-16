@@ -14,13 +14,13 @@ ny = None # Coordenada y de pontos de demanda
 mx = None # Coordenada x de locais candidatos
 my = None # Coordenada y de locais candidatos
 
-def read_instance(instance):
+def leituraInstancia(instancia):
     global A, B, C, D, mx, my, nx, ny
     nx = []
     ny = []
     mx = []
     my = []
-    file = open(instance, 'r')
+    file = open(instancia, 'r')
     first = True
     for line in file.readlines():
         if first:
@@ -37,127 +37,66 @@ def read_instance(instance):
             mx.append(int(line.split(' ')[1]))
             my.append(int(line.split(' ')[2]))
 
-def distance(i, j):
+def calculaDistancia(i, j):
     return ((mx[i] - nx[j]) ** 2 + (my[i] - ny[j]) ** 2) ** 0.5
 
-# def solve():
-#     n = B
-#     m = A
-#     P = 999999  # penalty
-#     K = 100000  # importance factor
-#
-#     # Criação do modelo
-#     model = ConcreteModel()
-#
-#     # Variáveis de decisão
-#     model.a = Var(range(A), domain=Binary, initialize=0)
-#     model.b = Var(range(B), domain=Binary, initialize=0)
-#
-#     # IMPLEMENTAÇÃO DO PROFESSOR PARA O ARTIGO COM O K
-#     model.obj = Objective(
-#         expr=K * sum(model.b[i] for i in range(n)) -
-#              sum(C * model.a[j] for j in range(m)) -
-#              sum(min([distance(i, j) for j in range(m) if value(model.a[j]) == 0] + [P]) for i in range(n)),
-#         sense=maximize
-#     )
-#
-#     # Restricoes
-#     model.cons = ConstraintList()
-#
-#     # Restrição para garantir que pelo menos uma antena seja alocada para cada ponto de demanda
-#     for i in range(n):
-#         model.cons.add(
-#             expr=sum(model.a[j] for j in range(m) if distance(i, j) <= D) >= model.b[i]
-#         )
-#
-#     # Restrição para garantir que pelo menos uma antena seja alocada
-#     model.cons.add(expr=sum(model.a[j] for j in range(m)) >= 1)
-#
-#     # Solução
-#     solver = SolverFactory('glpk')
-#     results = solver.solve(model)
-#
-#     # Verificar se a solução é ótima
-#     is_optimal = (results.solver.status == SolverStatus.ok) and (
-#                 results.solver.termination_condition == TerminationCondition.optimal)
-#
-#     if is_optimal:
-#         print("Solução Ótima Encontrada!")
-#     else:
-#         print("O Solver não encontrou uma solução ótima.")
-#
-#     # Mostrar resultados das antenas e pontos de demanda
-#     print("Resultado da Alocação das Antenas:")
-#     for j in range(A):
-#         print(f'Antena {j + 1}: {model.a[j]()}')
-#
-#     print("Resultado da Cobertura dos Pontos de Demanda:")
-#     for i in range(B):
-#         print(f'Ponto de demanda {i + 1}: {model.b[i]()}')
-#
-#     # Valor da função objetivo
-#     print("\nValor da Função Objetivo:")
-#     print(model.obj.expr())
-#
-#     # Número de Pontos não atendidos
-#     unattended_demand = sum(1 - model.b[i]() for i in range(B))
-#     print(f"Número de Pontos Não Atendidos: {unattended_demand}")
-#     return 1
-
-def calculate_score(j, A1, nx, ny, mx, my, D):
+def calculaScore(j, B0, D):
     score = 0
-    for i in range(len(nx)): #passa por todos os pontos de demanda
-        if i not in A1:
-            distance_val = distance(i, j)
-            if distance_val <= D:
-                score += 1 / distance_val  # Ponderação inversamente proporcional à distância
+    for i in B0: # Passa por todos os pontos de demanda ainda nao atendidos
+        distancia = calculaDistancia(i, j)
+        if distancia <= D:
+            score += 1 / distancia
     return score
 
-def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
-    while True:
-        melhorou = False
-
-        for j_em_A1 in A1:
-            for j_em_A0 in set(range(A)) - set(A1):
-                A1_temp = A1.copy()
-                A1_temp.remove(j_em_A1)
-                A1_temp.append(j_em_A0)
-
-                nova_f_value = f_value - calculate_score(j_em_A1, A1_temp, nx, ny, mx, my, D)
-                nova_f_value += calculate_score(j_em_A0, A1_temp, nx, ny, mx, my, D)
-
-                if nova_f_value > f_value:
-                    A1 = A1_temp
-                    f_value = nova_f_value
-                    melhorou = True
-
-        if not melhorou:
-            break
-
-    return A1, f_value
-
-def construcaoSemiGulosaComBuscaLocal(percentualGulosidade):
-    A0 = list(range(A))
-    A1 = []
+def construcaoSemiGulosa(percentualGulosidade):
+    A0 = list(range(A)) # Antenas nao alocadas
+    A1 = [] # Antenas alocadas
+    B0 = list(range(B)) #Pontos de demanda não atendidos
+    B1 = [] # Pontos de demanda atendidos
     f = 0
 
-    while A0:
-        # p = max(1, int(percentualGulosidade * len(A0)))
-        p = int(percentualGulosidade * len(A0)) #valor p é definido de acordo com o percentual de gulosidade - qtd de itens de A0 q serão achados de forma gulosa
+    while B0: # se existir ponto de demanda nao atendido
+        if A0 != []:
+            p = max(1, int(percentualGulosidade * len(A0))) # numero de antenas q serão consideradas após ordenar
+            scores = [calculaScore(j, B0, D) for j in A0]
+            indicesOrdenados = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True) # Ordena o índice dos scores
+            A0ordenado = [A0[i] for i in indicesOrdenados]
+            candidatos = A0ordenado[:p]
+            j = random.choice(candidatos) # Escolha aleatória de uma facilidade do subconjunto filtrado pelo percentual da gulosidade
+            A1.append(j) # Adiciona a facilidade escolhida em A1
+            A0.remove(j) # Remove a facilidade escolhida de A0
+            for i in B0:
+                distancia = calculaDistancia(i, j)
+                if distancia <= D:
+                    B1.append(i)  # Adiciona ponto de demanda ao array de atendidos
+                    B0.remove(i)  # Remove ponto de demanda pois foi atendido
+            f += calculaScore(j, B0, D)
+    return A1, A0, B1, B0, f
 
-        scores = [calculate_score(j, A1, nx, ny, mx, my, D) for j in A0]
-        sorted_indices = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True)
-        A0_sorted = [A0[i] for i in sorted_indices]
-        j = random.choice(A0_sorted[:p])
-        A1.append(j)
-        A0.remove(j)
-        f += calculate_score(j, A1, nx, ny, mx, my, D)
+# def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
+#     while True:
+#         melhorou = False
+#
+#         for j_em_A1 in A1:
+#             for j_em_A0 in set(range(A)) - set(A1):
+#                 A1_temp = A1.copy()
+#                 A1_temp.remove(j_em_A1)
+#                 A1_temp.append(j_em_A0)
+#
+#                 nova_f_value = f_value - calculate_score(j_em_A1, A1_temp, nx, ny, mx, my, D)
+#                 nova_f_value += calculate_score(j_em_A0, A1_temp, nx, ny, mx, my, D)
+#
+#                 if nova_f_value > f_value:
+#                     A1 = A1_temp
+#                     f_value = nova_f_value
+#                     melhorou = True
+#
+#         if not melhorou:
+#             break
+#
+#     return A1, f_value
 
-    A1, f = busca_local_simples(A1, f, nx, ny, mx, my, D)
-
-    return A1, f
-
-def print_allocation(A1, nx, ny, mx, my, D):
+def print_allocation(A1, B1):
     print("Resultado da Alocação das Antenas:")
     for j in range(A):
         if j in A1:
@@ -167,45 +106,34 @@ def print_allocation(A1, nx, ny, mx, my, D):
 
     print("\nResultado da Cobertura dos Pontos de Demanda:")
     for i in range(B):
-        covered = any(distance(j, i) <= D for j in A1)
-        if covered:
+        if i in B1:
             print(f'Ponto de demanda {i + 1}: Atendido')
         else:
             print(f'Ponto de demanda {i + 1}: Não Atendido')
 
-
-# Laço de Instâncias desejadas:
-
-isEntrou = False
-
+isEntrou = False # validadação de erro
 if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
-        read_instance(instance)
+        leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
-
-        # Chamada da heurística construtiva semi-gulosa
-       
-        A1, f_value = construcaoSemiGulosaComBuscaLocal(percentualGulosidade)
-        # Mostra os resultados
-        print("Solução Construída:", A1)
-        print("Valor da Função Objetivo:", f_value)
-        # Adiciona a impressão da alocação
-        print_allocation(A1, nx, ny, mx, my, D)
+        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade) # Chamada da heurística construtiva semi-gulosa
+        print("Antenas alocadas: ", A1)
+        print("Antenas não alocadas: ", A0)
+        print("Pontos de demanda atendidos: ", B1)
+        print("Pontos de demanda não atendidos: ", B0)
+        print("Valor da Função Objetivo:", f)
         print("-------------")
         isEntrou = True
 else:
     for instance in glob(f'./instancias/{instancia}'):
-        read_instance(instance)
+        leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
-
-        # Chamada da heurística construtiva semi-gulosa
-        A1, f_value = construcaoSemiGulosaComBuscaLocal(percentualGulosidade)
-
-        # Mostra os resultados
-        print("Solução Construída:", A1)
-        print("Valor da Função Objetivo:", f_value)
-        # Adiciona a impressão da alocação
-        print_allocation(A1, nx, ny, mx, my, D)
+        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade)  # Chamada da heurística construtiva semi-gulosa
+        print("Antenas alocadas: ", A1)
+        print("Antenas não alocadas: ", A0)
+        print("Pontos de demanda atendidos: ", B1)
+        print("Pontos de demanda não atendidos: ", B0)
+        print("Valor da Função Objetivo:", f)
         print("-------------")
         isEntrou = True
 
