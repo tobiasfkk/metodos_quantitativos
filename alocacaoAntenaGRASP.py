@@ -56,7 +56,7 @@ def construcaoSemiGulosa(percentualGulosidade):
     f = 0
 
     while B0: # se existir ponto de demanda nao atendido
-        if A0 != []:
+        if A0:
             p = max(1, int(percentualGulosidade * len(A0))) # numero de antenas q serão consideradas após ordenar
             scores = [calculaScore(j, B0, D) for j in A0]
             indicesOrdenados = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True) # Ordena o índice dos scores
@@ -71,6 +71,7 @@ def construcaoSemiGulosa(percentualGulosidade):
                     B1.append(i)  # Adiciona ponto de demanda ao array de atendidos
                     B0.remove(i)  # Remove ponto de demanda pois foi atendido
             f += calculaScore(j, B0, D)
+
     return A1, A0, B1, B0, f
 
 # def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
@@ -117,24 +118,24 @@ if instancia == 'T' or instancia == 't':
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
         A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade) # Chamada da heurística construtiva semi-gulosa
-        print("Antenas alocadas: ", A1)
-        print("Antenas não alocadas: ", A0)
-        print("Pontos de demanda atendidos: ", B1)
-        print("Pontos de demanda não atendidos: ", B0)
-        print("Valor da Função Objetivo:", f)
-        print("-------------")
+        print(" - Antenas alocadas: ", A1)
+        print(" - Antenas não alocadas: ", A0)
+        print(" - Pontos de demanda atendidos: ", B1)
+        print(" - Pontos de demanda não atendidos: ", B0)
+        print(" - Valor da Função Objetivo:", f)
+        print("")
         isEntrou = True
 else:
     for instance in glob(f'./instancias/{instancia}'):
         leituraInstancia(instance)
-        print(instance[instance.rindex('/') + 1:] + ': ', end='')
+        print("Instância " + instance[instance.rindex("/") + 1:] + ": ")
         A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade)  # Chamada da heurística construtiva semi-gulosa
-        print("Antenas alocadas: ", A1)
-        print("Antenas não alocadas: ", A0)
-        print("Pontos de demanda atendidos: ", B1)
-        print("Pontos de demanda não atendidos: ", B0)
-        print("Valor da Função Objetivo:", f)
-        print("-------------")
+        print(" - Antenas alocadas:", A1)
+        print(" - Antenas não alocadas:", A0)
+        print(" - Pontos de demanda atendidos:", B1)
+        print(" - Pontos de demanda não atendidos:", B0)
+        print(" - Valor da Função Objetivo:", f)
+        print("")
         isEntrou = True
 
 if isEntrou == False:
