@@ -133,13 +133,14 @@ isEntrou = False # validadação de erro
 if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         leituraInstancia(instance)
-        print(instance[instance.rindex('/') + 1:] + ': ', end='')
+        print(instance[instance.rindex('/') + 1:] + ': ')
         A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade) # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas: ", len(A1))
         print(" - Antenas não alocadas: ", len(A0))
         print(" - Pontos de demanda atendidos: ", len(B1))
         print(" - Pontos de demanda não atendidos: ", len(B0))
-        print(" - Valor da Função Objetivo:", f)
+        print(" - Score das antenas alocadas:", f)
+        print(" - Custo total:", len(A1) * C)
         print("")
         print_allocation(A1, B1)
         print("")
@@ -153,7 +154,8 @@ else:
         print(" - Antenas não alocadas:", len(A0))
         print(" - Pontos de demanda atendidos:", len(B1))
         print(" - Pontos de demanda não atendidos:", len(B0))
-        print(" - Valor da Função Objetivo:", f)
+        print(" - Score das antenas alocadas:", f)
+        print(" - Custo total:", len(A1) * C)
         print("")
         print_allocation(A1, B1)
         print("")

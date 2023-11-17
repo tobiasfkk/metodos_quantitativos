@@ -21,7 +21,7 @@ Uso:
 
 Exemplo: 
 
-    python geradorInstancia.py 33000 30000 7000 10000 5 10 10 5 100 100
+    python geradorInstancia.py 33000 30000 7000 10000 5 30 30 5 100 100
 
 Executando pelo terminal o comando do exemplo acima, serão gerados dois grupos de instâncias, pequenas e grandes.
 
