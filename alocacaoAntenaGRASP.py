@@ -123,6 +123,7 @@ if instancia == 'T' or instancia == 't':
         print(" - Pontos de demanda atendidos: ", B1)
         print(" - Pontos de demanda não atendidos: ", B0)
         print(" - Valor da Função Objetivo:", f)
+        # print_allocation(A1, B1)
         print("")
         isEntrou = True
 else:
