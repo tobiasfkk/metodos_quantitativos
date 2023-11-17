@@ -86,9 +86,10 @@ def construcaoSemiGulosa(percentualGulosidade):
                         B0.remove(i)  # Remove ponto de demanda pois foi atendido
                 f += calculaScore(j, B0, D)
         else:
-            for j in A0removidos:
-                A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
-            return A1, A0, B1, B0, f
+            break
+    for j in A0removidos:
+        A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
+    return A1, A0, B1, B0, f
 
 # def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
 #     while True:
