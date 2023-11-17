@@ -51,8 +51,14 @@ def calculaScore(j, B0, D):
 def construcaoSemiGulosa(percentualAleatoriedade):
     A0 = list(range(A)) # Antenas nao alocadas
     A1 = [] # Antenas alocadas
+    A0Final = []
+    for i in A0:
+        A0Final.append(0)
     B0 = list(range(B)) #Pontos de demanda não atendidos
     B1 = [] # Pontos de demanda atendidos
+    B0Final = []
+    for i in B0:
+        B0Final.append(0)
     f = 0
     A0removidos =[]
     while B0: # enquanto existir ponto de demanda nao atendido
@@ -77,17 +83,19 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                 j = random.choice(candidatos) # Escolha aleatória de uma facilidade do subconjunto filtrado pelo percentual de aleatoriedade
                 A1.append(j) # Adiciona a facilidade escolhida em A1
                 A0.remove(j) # Remove a facilidade escolhida de A0
+                A0Final[j] = 1
                 for i in B0:
                     distancia = calculaDistancia(i, j)
                     if distancia <= D:
                         B1.append(i)  # Adiciona ponto de demanda ao array de atendidos
                         B0.remove(i)  # Remove ponto de demanda pois foi atendido
+                        B0Final[i] = 1
                 f += calculaScore(j, B0, D)
         else:
             break
     for j in A0removidos:
         A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
-    return A1, A0, B1, B0, f
+    return A1, A0, B1, B0, f, A0Final, B0Final
 
 # def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
 #     while True:
@@ -131,13 +139,15 @@ if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ')
-        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualAleatoriedade) # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, f, A0Final, B0Final = construcaoSemiGulosa(percentualAleatoriedade) # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas: ", len(A1))
         print(" - Antenas não alocadas: ", len(A0))
         print(" - Pontos de demanda atendidos: ", len(B1))
         print(" - Pontos de demanda não atendidos: ", len(B0))
         print(" - Score das antenas alocadas:", f)
         print(" - Custo total:", len(A1) * C)
+        print(" - Antenas:", A0Final)
+        print(" - Pontos de demanda:", B0Final)
         print("")
         print_allocation(A1, B1)
         print("")
@@ -146,13 +156,15 @@ else:
     for instance in glob(f'./instancias/{instancia}'):
         leituraInstancia(instance)
         print("Instância " + instance[instance.rindex("/") + 1:] + ": ")
-        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualAleatoriedade)  # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, f, A0Final, B0Final = construcaoSemiGulosa(percentualAleatoriedade)  # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas:", len(A1))
         print(" - Antenas não alocadas:", len(A0))
         print(" - Pontos de demanda atendidos:", len(B1))
         print(" - Pontos de demanda não atendidos:", len(B0))
         print(" - Score das antenas alocadas:", f)
         print(" - Custo total:", len(A1) * C)
+        print(" - Antenas:", A0Final)
+        print(" - Pontos de demanda:", B0Final)
         print("")
         print_allocation(A1, B1)
         print("")
