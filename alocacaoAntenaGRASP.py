@@ -55,9 +55,10 @@ def construcaoSemiGulosa(percentualGulosidade):
     B1 = [] # Pontos de demanda atendidos
     f = 0
 
-    while B0: # se existir ponto de demanda nao atendido
-        if A0:
-            p = max(1, int(percentualGulosidade * len(A0))) # numero de antenas q serão consideradas após ordenar
+    while B0: # enquanto existir ponto de demanda nao atendido
+        if A0: # se existir antena disponível para alocar
+            # p = max(1, int(percentualGulosidade * len(A0))) # numero de antenas q serão consideradas após ordenar
+            p = int(percentualGulosidade * len(A0))
             scores = [calculaScore(j, B0, D) for j in A0]
             indicesOrdenados = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True) # Ordena o índice dos scores
             A0ordenado = [A0[i] for i in indicesOrdenados]
