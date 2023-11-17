@@ -1,3 +1,9 @@
+# Repositório
+
+Disponível em:
+  
+    https://github.com/tobiasfkk/metodos_quantitativos
+
 # Gerador de Instâncias
 
 Gerador de instâncias cria dois modelos de instâncias: grandes e pequenas, ambas em formato txt e com parâmetros de entrada configuráveis pelo usuário.
