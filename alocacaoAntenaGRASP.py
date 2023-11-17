@@ -3,7 +3,7 @@ from glob import glob
 import random
 
 instancia = sys.argv[1]
-percentualGulosidade = float(sys.argv[2])
+percentualAleatoriedade = float(sys.argv[2])
 
 A = None # Quantidade de locais candidatos
 B = None # Quantidade de pontos de demanda
@@ -48,7 +48,7 @@ def calculaScore(j, B0, D):
             score += 1 / distancia
     return score
 
-def construcaoSemiGulosa(percentualGulosidade):
+def construcaoSemiGulosa(percentualAleatoriedade):
     A0 = list(range(A)) # Antenas nao alocadas
     A1 = [] # Antenas alocadas
     B0 = list(range(B)) #Pontos de demanda não atendidos
@@ -57,8 +57,6 @@ def construcaoSemiGulosa(percentualGulosidade):
     A0removidos =[]
     while B0: # enquanto existir ponto de demanda nao atendido
         if A0: # se existir antena disponível para alocar
-            # p = max(1, int(percentualGulosidade * len(A0))) # numero de antenas q serão consideradas após ordenar
-            # scores = [calculaScore(j, B0, D) for j in A0]
             scores = []
             A0remove = [] # Lista q receberá a facilidade que não atende nenhum ponto de demanda, para então remover de A0
             for j in A0:
@@ -74,9 +72,9 @@ def construcaoSemiGulosa(percentualGulosidade):
             if A0 and scores:
                 indicesOrdenados = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True) # Ordena o índice dos scores
                 A0ordenado = [A0[j] for j in indicesOrdenados]
-                p = max(1, int(percentualGulosidade * len(A0ordenado)))  # numero de antenas q serão consideradas após ordenar
+                p = max(1, int(percentualAleatoriedade * len(A0ordenado)))  # numero de antenas q serão consideradas após ordenar
                 candidatos = A0ordenado[:p]
-                j = random.choice(candidatos) # Escolha aleatória de uma facilidade do subconjunto filtrado pelo percentual da gulosidade
+                j = random.choice(candidatos) # Escolha aleatória de uma facilidade do subconjunto filtrado pelo percentual de aleatoriedade
                 A1.append(j) # Adiciona a facilidade escolhida em A1
                 A0.remove(j) # Remove a facilidade escolhida de A0
                 for i in B0:
@@ -121,7 +119,6 @@ def print_allocation(A1, B1):
             print(f' - Antena {j + 1}: Alocada')
         else:
             print(f' - Antena {j + 1}: Não Alocada')
-
     print("\nResultado da Cobertura dos Pontos de Demanda:")
     for i in range(B):
         if i in B1:
@@ -134,7 +131,7 @@ if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ')
-        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade) # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualAleatoriedade) # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas: ", len(A1))
         print(" - Antenas não alocadas: ", len(A0))
         print(" - Pontos de demanda atendidos: ", len(B1))
@@ -149,7 +146,7 @@ else:
     for instance in glob(f'./instancias/{instancia}'):
         leituraInstancia(instance)
         print("Instância " + instance[instance.rindex("/") + 1:] + ": ")
-        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade)  # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, f = construcaoSemiGulosa(percentualAleatoriedade)  # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas:", len(A1))
         print(" - Antenas não alocadas:", len(A0))
         print(" - Pontos de demanda atendidos:", len(B1))
@@ -163,6 +160,6 @@ else:
 
 if isEntrou == False:
     print('Instância informada não existe!')
-    print('Aplicar GRASP em uma instância específica use: python alocacaoAntenaGRASP <nome da instancia>.txt <percentual de gulosidade, valor entre 0 e 1>')
-    print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP <T> <percentual de gulosidade, valor entre 0 e 1>')
+    print('Aplicar GRASP em uma instância específica use: python alocacaoAntenaGRASP <nome da instancia>.txt <percentual de aleatoriedade, valor entre 0 e 1>')
+    print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP <T> <percentual de aleatoriedade, valor entre 0 e 1>')
     sys.exit(1)

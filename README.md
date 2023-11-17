@@ -110,4 +110,7 @@ Lembrando que só é possível aplicar a heurística nas instâncias presentes n
 Parâmetros de entrada:
 
     <nome da instância> = nome do arquivo texto localizado no caminho .../métodos_quantitativos/instancias
-    <percentual de gulosidade> = percentual da gulosidade para aplicada na heurística construtiva - valor entre 0 e 1
+    <percentual de aleatoriedade> = percentual da aleatoriedade aplicada na heurística construtiva - valor entre 0 e 1
+
+0 = 0% ALEATÓRIO
+1 = 100% ALEATÓRIO
