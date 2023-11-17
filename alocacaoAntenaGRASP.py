@@ -118,16 +118,16 @@ def print_allocation(A1, B1):
     print("Resultado da Alocação das Antenas:")
     for j in range(A):
         if j in A1:
-            print(f'Antena {j + 1}: Alocada')
+            print(f' - Antena {j + 1}: Alocada')
         else:
-            print(f'Antena {j + 1}: Não Alocada')
+            print(f' - Antena {j + 1}: Não Alocada')
 
     print("\nResultado da Cobertura dos Pontos de Demanda:")
     for i in range(B):
         if i in B1:
-            print(f'Ponto de demanda {i + 1}: Atendido')
+            print(f' - Ponto de demanda {i + 1}: Atendido')
         else:
-            print(f'Ponto de demanda {i + 1}: Não Atendido')
+            print(f' - Ponto de demanda {i + 1}: Não Atendido')
 
 isEntrou = False # validadação de erro
 if instancia == 'T' or instancia == 't':
@@ -135,11 +135,12 @@ if instancia == 'T' or instancia == 't':
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ', end='')
         A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade) # Chamada da heurística construtiva semi-gulosa
-        print(" - Antenas alocadas: ", A1)
-        print(" - Antenas não alocadas: ", A0)
-        print(" - Pontos de demanda atendidos: ", B1)
-        print(" - Pontos de demanda não atendidos: ", B0)
+        print(" - Antenas alocadas: ", len(A1))
+        print(" - Antenas não alocadas: ", len(A0))
+        print(" - Pontos de demanda atendidos: ", len(B1))
+        print(" - Pontos de demanda não atendidos: ", len(B0))
         print(" - Valor da Função Objetivo:", f)
+        print("")
         print_allocation(A1, B1)
         print("")
         isEntrou = True
@@ -148,11 +149,12 @@ else:
         leituraInstancia(instance)
         print("Instância " + instance[instance.rindex("/") + 1:] + ": ")
         A1, A0, B1, B0, f = construcaoSemiGulosa(percentualGulosidade)  # Chamada da heurística construtiva semi-gulosa
-        print(" - Antenas alocadas:", A1)
-        print(" - Antenas não alocadas:", A0)
-        print(" - Pontos de demanda atendidos:", B1)
-        print(" - Pontos de demanda não atendidos:", B0)
+        print(" - Antenas alocadas:", len(A1))
+        print(" - Antenas não alocadas:", len(A0))
+        print(" - Pontos de demanda atendidos:", len(B1))
+        print(" - Pontos de demanda não atendidos:", len(B0))
         print(" - Valor da Função Objetivo:", f)
+        print("")
         print_allocation(A1, B1)
         print("")
         isEntrou = True
