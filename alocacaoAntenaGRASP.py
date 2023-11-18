@@ -5,14 +5,14 @@ import random
 instancia = sys.argv[1]
 percentualAleatoriedade = float(sys.argv[2])
 
-A = None # Quantidade de locais candidatos
-B = None # Quantidade de pontos de demanda
-C = None # Custo das antenas
-D = None # Alcance das antenas
-nx = None # Coordenada x de pontos de demanda
-ny = None # Coordenada y de pontos de demanda
-mx = None # Coordenada x de locais candidatos
-my = None # Coordenada y de locais candidatos
+# A = None # Quantidade de locais candidatos
+# B = None # Quantidade de pontos de demanda
+# C = None # Custo das antenas
+# D = None # Alcance das antenas
+# nx = None # Coordenada x de pontos de demanda
+# ny = None # Coordenada y de pontos de demanda
+# mx = None # Coordenada x de locais candidatos
+# my = None # Coordenada y de locais candidatos
 
 def leituraInstancia(instancia):
     global A, B, C, D, mx, my, nx, ny
@@ -38,7 +38,7 @@ def leituraInstancia(instancia):
             my.append(int(line.split(' ')[2]))
 
 def calculaDistancia(i, j):
-    return ((mx[i] - nx[j]) ** 2 + (my[i] - ny[j]) ** 2) ** 0.5
+    return ((mx[j] - nx[i]) ** 2 + (my[j] - ny[i]) ** 2) ** 0.5
 
 def calculaScore(j, B0, D):
     score = 0
