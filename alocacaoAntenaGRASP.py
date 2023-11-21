@@ -31,19 +31,13 @@ def leituraInstancia(instancia):
 def calculaDistancia(i, j):
     return ((mx[j] - nx[i]) ** 2 + (my[j] - ny[i]) ** 2) ** 0.5
 
-def calculaScore(j, B0, B1, D):
+def calculaScore(j, B0, D):
+
     score = 0
     for i in B0: # Passa por todos os pontos de demanda ainda nao atendidos
         distancia = calculaDistancia(i, j)
         if distancia <= D:
             score += 1 / distancia
-
-    for i, antena in B1:# Verificar se a antena atual atende melhor algum ponto de demanda ja atendido por outra antena, adicionando junto no score
-        distancia = calculaDistancia(i, j)
-        if distancia <= D:
-            score += 1 / distancia
-            B1[(i,antena)] = i,j #Atualiza o ponto de demanda atendido, agora de forma mais próxima de outra antena
-            #AQUI PRECISA REMOVER o score da antena referente o ponto q n sera mais atendido por ela
     return score
 
 def construcaoSemiGulosa(percentualAleatoriedade):
@@ -64,7 +58,7 @@ def construcaoSemiGulosa(percentualAleatoriedade):
             scores = []
             A0remove = [] # Lista q receberá a facilidade que não atende nenhum ponto de demanda, para então remover de A0
             for j in A0:
-                score = calculaScore(j, B0, B1, D)
+                score = calculaScore(j, B0, D)
                 if score > 0:
                     scores.append(score) #desta forma vai selecionar apenas os locais candidatos que atendam pelo menos uma antena
                 else:
@@ -90,7 +84,8 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                         B1.append((i, j))  # Adiciona ponto de demanda ao array de atendidos e também qual antena atendeu cada ponto de demanda
                         B0.remove(i)  # Remove ponto de demanda pois foi atendido
                         B1Final[i] = 1
-                f += calculaScore(j, B0, B1, D)
+
+                f += calculaScore(j, B0, D)
         else:
             break
 
@@ -155,3 +150,11 @@ if isEntrou == False:
     print('Aplicar GRASP em uma instância específica use: python alocacaoAntenaGRASP <nome da instancia>.txt <percentual de aleatoriedade, valor entre 0 e 1>')
     print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP <T> <percentual de aleatoriedade, valor entre 0 e 1>')
     sys.exit(1)
+
+
+    # for i, (pontoDemanda, antena) in enumerate(B1):# Verifica se a antena atual atende melhor algum ponto de demanda ja atendido por outra antena, adicionando junto no score
+    #     distancia = calculaDistancia(pontoDemanda, j)
+    #     if distancia <= D:
+    #         score += 1 / distancia
+    #         B1[i] = (pontoDemanda,j) #Atualiza o ponto de demanda atendido, agora de forma mais próxima de outra antena
+    #         #AQUI PRECISA REMOVER o score da antena referente o ponto q n sera mais atendido por ela
