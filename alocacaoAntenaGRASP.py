@@ -40,20 +40,36 @@ def calculaScore(j, B0, D):
     return score
 
 def construcaoSemiGulosa(percentualAleatoriedade):
-    A0 = list(range(A)) # Antenas nao alocadas
-    A1 = [] # Antenas alocadas
-    A0Final = []
-    for i in A0:
-        A0Final.append(0)
-    B0 = list(range(B)) #Pontos de demanda não atendidos
-    B1 = [] # Pontos de demanda atendidos
-    B0Final = [0] * B # Constrói o array vazio que será utilizado no final
+
+    # Antenas nao alocadas
+    A0 = list(range(A))
+
+    # Antenas alocadas
+    A1 = []
+
+    # Constrói o array vazio que será utilizado no final
+    A0Final = [0] * A
+
+    # Pontos de demanda não atendidos
+    B0 = list(range(B))
+
+    # Pontos de demanda atendidos
+    B1 = []
+
+    # Constrói o array vazio que será utilizado no final
+    B0Final = [0] * B
+
     f = 0
     A0removidos =[]
+
     while B0: # enquanto existir ponto de demanda nao atendido
         if A0: # se existir antena disponível para alocar
+
             scores = []
-            A0remove = [] # Lista q receberá a facilidade que não atende nenhum ponto de demanda, para então remover de A0
+
+            # Lista q receberá a facilidade que não atende nenhum ponto de demanda, para então remover de A0
+            A0remove = []
+
             for j in A0:
                 score = calculaScore(j, B0, D)
                 if score > 0:
@@ -61,29 +77,65 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                 else:
                     A0remove.append(j) # Armazena os antenas que não atendem nenhum ponto de demanda
                     A0removidos.append(j)  # Armazena os antenas que não atendem nenhum ponto de demanda para adicionar ao conjunto de antenas nao alocadas posteriormente
+
             for j in A0remove:
                 A0.remove(j) # Remove facilidade que não atende nenhum ponto de demanda
+
             if A0 and scores:
                 indicesOrdenados = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True) # Ordena o índice dos scores
                 A0ordenado = [A0[j] for j in indicesOrdenados]
                 p = max(1, int(percentualAleatoriedade * len(A0ordenado)))  # numero de antenas q serão consideradas após ordenar
                 candidatos = A0ordenado[:p]
+
                 j = random.choice(candidatos) # Escolha aleatória de uma facilidade do subconjunto filtrado pelo percentual de aleatoriedade
                 A1.append(j) # Adiciona a facilidade escolhida em A1
                 A0.remove(j) # Remove a facilidade escolhida de A0
                 A0Final[j] = 1
+
                 for i in B0:
                     distancia = calculaDistancia(i, j)
                     if distancia <= D:
                         B1.append((i,j))  # Adiciona ponto de demanda ao array de atendidos junto com a antena que foi alocada
                         B0.remove(i)  # Remove ponto de demanda pois foi atendido
                         B0Final[i] = 1
+
                         #AQUI ANTES DE CALCULAR O SCORE TEM Q VERIFICAR SE EXISTE ANTENA JA ALOCADA (A1) Que ESTEJA MAIS PROXIMA DO PONTO de demanda i in B0, PARA ENTAO CORRIGIR O SCORE INDIVIDUAL Da antena que alocou E ALTERAR A ANTENA Q ESTÁ ATENDENDO o ponto (array B1)
+
+                        # Verifica se existe antena já alocada (A1) mais próxima do ponto de demanda em B0
+                        antena_mais_proxima = min(A1, key=lambda a: calculaDistancia(i, a), default=None)
+
+                        if antena_mais_proxima is not None:
+                            distancia_atual = calculaDistancia(i, antena_mais_proxima)
+                            if distancia_atual < distancia:
+                                # Atualiza a antena que está atendendo o ponto
+                                ponto_atendido = next((p for p, a in B1 if p == i), None)
+                                if ponto_atendido is not None:
+                                    B1.remove((ponto_atendido, j))
+                                    B1.append((ponto_atendido, antena_mais_proxima))
+
+                                # Remove o score equivalente da antena antiga
+                                f -= calculaScore(j, [i], D)
+
+                                # Adiciona o score da nova antena
+                                f += calculaScore(antena_mais_proxima, [i], D)
+
+                for jj in A1:  # Antenas já alocadas
+                    distanciaAntenaJaAlocada = calculaDistancia(i, jj)
+                    if distanciaAntenaJaAlocada < distancia:
+                        for ii in B1:
+                            p = B1[ii].split(',')
+                            p = p[0]
+                            if p == i:
+                                B1[ii] = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
+                                distancia = distanciaAntenaJaAlocada
+
                 f += calculaScore(j, B0, D)
         else:
             break
+
     for j in A0removidos:
         A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
+
     return A1, A0, B1, B0, f, A0Final, B0Final
 
 def print_allocation(A1, B1):
