@@ -32,7 +32,6 @@ def calculaDistancia(i, j):
     return ((mx[j] - nx[i]) ** 2 + (my[j] - ny[i]) ** 2) ** 0.5
 
 def calculaScore(j, B0, D):
-
     score = 0
     for i in B0: # Passa por todos os pontos de demanda ainda nao atendidos
         distancia = calculaDistancia(i, j)
@@ -41,7 +40,6 @@ def calculaScore(j, B0, D):
     return score
 
 def construcaoSemiGulosa(percentualAleatoriedade):
-
     A0 = list(range(A)) # Antenas nao alocadas
     A1 = [] # Antenas alocadas
     A0Final = []
@@ -49,10 +47,9 @@ def construcaoSemiGulosa(percentualAleatoriedade):
         A0Final.append(0)
     B0 = list(range(B)) #Pontos de demanda não atendidos
     B1 = [] # Pontos de demanda atendidos
-    B1Final = [0] * B # Constrói o array vazio que será utilizado no final
+    B0Final = [0] * B # Constrói o array vazio que será utilizado no final
     f = 0
     A0removidos =[]
-
     while B0: # enquanto existir ponto de demanda nao atendido
         if A0: # se existir antena disponível para alocar
             scores = []
@@ -64,10 +61,8 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                 else:
                     A0remove.append(j) # Armazena os antenas que não atendem nenhum ponto de demanda
                     A0removidos.append(j)  # Armazena os antenas que não atendem nenhum ponto de demanda para adicionar ao conjunto de antenas nao alocadas posteriormente
-
             for j in A0remove:
                 A0.remove(j) # Remove facilidade que não atende nenhum ponto de demanda
-
             if A0 and scores:
                 indicesOrdenados = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True) # Ordena o índice dos scores
                 A0ordenado = [A0[j] for j in indicesOrdenados]
@@ -77,22 +72,18 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                 A1.append(j) # Adiciona a facilidade escolhida em A1
                 A0.remove(j) # Remove a facilidade escolhida de A0
                 A0Final[j] = 1
-
                 for i in B0:
                     distancia = calculaDistancia(i, j)
                     if distancia <= D:
-                        B1.append((i, j))  # Adiciona ponto de demanda ao array de atendidos e também qual antena atendeu cada ponto de demanda
+                        B1.append((i,j))  # Adiciona ponto de demanda ao array de atendidos junto com a antena que foi alocada
                         B0.remove(i)  # Remove ponto de demanda pois foi atendido
-                        B1Final[i] = 1
-
+                        B0Final[i] = 1
                 f += calculaScore(j, B0, D)
         else:
             break
-
     for j in A0removidos:
         A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
-
-    return A1, A0, B1, B0, f, A0Final, B1Final
+    return A1, A0, B1, B0, f, A0Final, B0Final
 
 def print_allocation(A1, B1):
     print("Resultado da Alocação das Antenas:")
@@ -101,11 +92,11 @@ def print_allocation(A1, B1):
             print(f' - Antena {j + 1}: Alocada')
         else:
             print(f' - Antena {j + 1}: Não Alocada')
-
     print("\nResultado da Cobertura dos Pontos de Demanda:")
+
     for i in range(B):
-        if i in B1:
-            print(f' - Ponto de demanda {i + 1}: Atendido pela Antena {B1[i][1] + 1}')
+        if any(pontoDemanda == i for pontoDemanda, _ in B1):
+            print(f' - Ponto de demanda {i + 1}: Atendido')
         else:
             print(f' - Ponto de demanda {i + 1}: Não Atendido')
 
@@ -114,7 +105,7 @@ if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ')
-        A1, A0, B1, B0, f, A0Final, BFinal = construcaoSemiGulosa(percentualAleatoriedade) # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, f, A0Final, B0Final = construcaoSemiGulosa(percentualAleatoriedade) # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas: ", len(A1))
         print(" - Antenas não alocadas: ", len(A0))
         print(" - Pontos de demanda atendidos: ", len(B1))
@@ -122,7 +113,7 @@ if instancia == 'T' or instancia == 't':
         print(" - Score das antenas alocadas:", f)
         print(" - Custo total:", len(A1) * C)
         print(" - Antenas:", A0Final)
-        print(" - Pontos de demanda:", BFinal)
+        print(" - Pontos de demanda:", B0Final)
         print("")
         print_allocation(A1, B1)
         print("")
@@ -131,7 +122,7 @@ else:
     for instance in glob(f'./instancias/{instancia}'):
         leituraInstancia(instance)
         print("Instância " + instance[instance.rindex("/") + 1:] + ": ")
-        A1, A0, B1, B0, f, A0Final, BFinal = construcaoSemiGulosa(percentualAleatoriedade)  # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, f, A0Final, B0Final = construcaoSemiGulosa(percentualAleatoriedade)  # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas:", len(A1))
         print(" - Antenas não alocadas:", len(A0))
         print(" - Pontos de demanda atendidos:", len(B1))
@@ -139,7 +130,7 @@ else:
         print(" - Score das antenas alocadas:", f)
         print(" - Custo total:", len(A1) * C)
         print(" - Antenas:", A0Final)
-        print(" - Pontos de demanda:", BFinal)
+        print(" - Pontos de demanda:", B0Final)
         print("")
         print_allocation(A1, B1)
         print("")
@@ -151,10 +142,32 @@ if isEntrou == False:
     print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP <T> <percentual de aleatoriedade, valor entre 0 e 1>')
     sys.exit(1)
 
-
-    # for i, (pontoDemanda, antena) in enumerate(B1):# Verifica se a antena atual atende melhor algum ponto de demanda ja atendido por outra antena, adicionando junto no score
-    #     distancia = calculaDistancia(pontoDemanda, j)
+    # for i, antena in B1:  # Verificar se a antena atual atende melhor algum ponto de demanda ja atendido por outra antena, adicionando junto no score
+    #     distancia = calculaDistancia(i, j)
     #     if distancia <= D:
     #         score += 1 / distancia
-    #         B1[i] = (pontoDemanda,j) #Atualiza o ponto de demanda atendido, agora de forma mais próxima de outra antena
-    #         #AQUI PRECISA REMOVER o score da antena referente o ponto q n sera mais atendido por ela
+    #         B1[(i, antena)] = i, j  # Atualiza o ponto de demanda atendido, agora de forma mais próxima de outra antena
+    #         # AQUI PRECISA REMOVER o score da antena referente o ponto q n sera mais atendido por ela
+
+    # def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
+    #     while True:
+    #         melhorou = False
+    #
+    #         for j_em_A1 in A1:
+    #             for j_em_A0 in set(range(A)) - set(A1):
+    #                 A1_temp = A1.copy()
+    #                 A1_temp.remove(j_em_A1)
+    #                 A1_temp.append(j_em_A0)
+    #
+    #                 nova_f_value = f_value - calculate_score(j_em_A1, A1_temp, nx, ny, mx, my, D)
+    #                 nova_f_value += calculate_score(j_em_A0, A1_temp, nx, ny, mx, my, D)
+    #
+    #                 if nova_f_value > f_value:
+    #                     A1 = A1_temp
+    #                     f_value = nova_f_value
+    #                     melhorou = True
+    #
+    #         if not melhorou:
+    #             break
+    #
+    #     return A1, f_value
