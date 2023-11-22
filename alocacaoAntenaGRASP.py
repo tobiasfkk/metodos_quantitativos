@@ -78,6 +78,7 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                         B1.append((i,j))  # Adiciona ponto de demanda ao array de atendidos junto com a antena que foi alocada
                         B0.remove(i)  # Remove ponto de demanda pois foi atendido
                         B0Final[i] = 1
+                        #AQUI ANTES DE CALCULAR O SCORE TEM Q VERIFICAR SE EXISTE ANTENA JA ALOCADA (A1) Que ESTEJA MAIS PROXIMA DO PONTO de demanda i in B0, PARA ENTAO CORRIGIR O SCORE INDIVIDUAL Da antena que alocou E Alterar A ANTENA Q ESTÁ ATENDENDO o ponto (array B1)
                 f += calculaScore(j, B0, D)
         else:
             break
