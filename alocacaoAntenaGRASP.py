@@ -101,32 +101,31 @@ def construcaoSemiGulosa(percentualAleatoriedade):
 
                         #AQUI ANTES DE CALCULAR O SCORE TEM Q VERIFICAR SE EXISTE ANTENA JA ALOCADA (A1) Que ESTEJA MAIS PROXIMA DO PONTO de demanda i in B0, PARA ENTAO CORRIGIR O SCORE INDIVIDUAL Da antena que alocou E ALTERAR A ANTENA Q ESTÁ ATENDENDO o ponto (array B1)
 
-                        # Verifica se existe antena já alocada (A1) mais próxima do ponto de demanda em B0
-                        antena_mais_proxima = min(A1, key=lambda a: calculaDistancia(i, a), default=None)
-
-                        if antena_mais_proxima is not None:
-                            distancia_atual = calculaDistancia(i, antena_mais_proxima)
-                            if distancia_atual < distancia:
-                                # Atualiza a antena que está atendendo o ponto
-                                ponto_atendido = next((p for p, a in B1 if p == i), None)
-                                if ponto_atendido is not None:
-                                    B1.remove((ponto_atendido, j))
-                                    B1.append((ponto_atendido, antena_mais_proxima))
-
-                                # Remove o score equivalente da antena antiga
-                                f -= calculaScore(j, [i], D)
-
-                                # Adiciona o score da nova antena
-                                f += calculaScore(antena_mais_proxima, [i], D)
+                        # # Verifica se existe antena já alocada (A1) mais próxima do ponto de demanda em B0
+                        # antena_mais_proxima = min(A1, key=lambda a: calculaDistancia(i, a), default=None)
+                        #
+                        # if antena_mais_proxima is not None:
+                        #     distancia_atual = calculaDistancia(i, antena_mais_proxima)
+                        #     if distancia_atual < distancia:
+                        #         # Atualiza a antena que está atendendo o ponto
+                        #         ponto_atendido = next((p for p, a in B1 if p == i), None)
+                        #         if ponto_atendido is not None:
+                        #             B1.remove((ponto_atendido, j))
+                        #             B1.append((ponto_atendido, antena_mais_proxima))
+                        #
+                        #         # Remove o score equivalente da antena antiga
+                        #         f -= calculaScore(j, [i], D)
+                        #
+                        #         # Adiciona o score da nova antena
+                        #         f += calculaScore(antena_mais_proxima, [i], D)
 
                         for jj in A1:  # Antenas já alocadas
                             distanciaAntenaJaAlocada = calculaDistancia(i, jj)
                             if distanciaAntenaJaAlocada < distancia:
                                 for ii in B1:
-                                    p = B1[ii].split(',')
-                                    p = p[0]
+                                    p = ii[0]
                                     if p == i:
-                                        B1[ii] = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
+                                        ii = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
                                         distancia = distanciaAntenaJaAlocada
 
                 f += calculaScore(j, B0, D)
