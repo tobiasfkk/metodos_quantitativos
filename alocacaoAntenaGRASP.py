@@ -84,7 +84,12 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                         for jj in A1: # Antenas já alocadas
                             distanciaAntenajaAlocada = calculaDistancia(i, jj)
                             if distanciaAntenajaAlocada < distancia:
-                                B1[(i,j)] = (i,jj) # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
+                                for ii in B1:
+                                    p = B1[ii].split(',')
+                                    p = p[0]
+                                    if p == i:
+                                        B1[ii] = (i,jj) # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
+                                        distancia = distanciaAntenajaAlocada
 
 
                 f += calculaScore(j, B0, D)
