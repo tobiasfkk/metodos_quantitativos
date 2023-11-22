@@ -123,10 +123,12 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                             if jj != j:
                                 distanciaAntenaJaAlocada = calculaDistancia(i, jj)
                                 if distanciaAntenaJaAlocada < distancia:
+                                    indice = -1
                                     for ii in B1:
                                         p = ii[0]
+                                        indice +=1
                                         if p == i:
-                                            ii = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
+                                            B1[indice] = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
                                             distancia = distanciaAntenaJaAlocada
 
                 f += calculaScore(j, B0, D)
