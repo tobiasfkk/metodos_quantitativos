@@ -99,37 +99,17 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                         B0.remove(i)  # Remove ponto de demanda pois foi atendido
                         B0Final[i] = 1
 
-                        #AQUI ANTES DE CALCULAR O SCORE TEM Q VERIFICAR SE EXISTE ANTENA JA ALOCADA (A1) Que ESTEJA MAIS PROXIMA DO PONTO de demanda i in B0, PARA ENTAO CORRIGIR O SCORE INDIVIDUAL Da antena que alocou E ALTERAR A ANTENA Q ESTÁ ATENDENDO o ponto (array B1)
-
-                        # # Verifica se existe antena já alocada (A1) mais próxima do ponto de demanda em B0
-                        # antena_mais_proxima = min(A1, key=lambda a: calculaDistancia(i, a), default=None)
-                        #
-                        # if antena_mais_proxima is not None:
-                        #     distancia_atual = calculaDistancia(i, antena_mais_proxima)
-                        #     if distancia_atual < distancia:
-                        #         # Atualiza a antena que está atendendo o ponto
-                        #         ponto_atendido = next((p for p, a in B1 if p == i), None)
-                        #         if ponto_atendido is not None:
-                        #             B1.remove((ponto_atendido, j))
-                        #             B1.append((ponto_atendido, antena_mais_proxima))
-                        #
-                        #         # Remove o score equivalente da antena antiga
-                        #         f -= calculaScore(j, [i], D)
-                        #
-                        #         # Adiciona o score da nova antena
-                        #         f += calculaScore(antena_mais_proxima, [i], D)
-
                         for jj in A1:  # Antenas já alocadas
                             if jj != j:
                                 distanciaAntenaJaAlocada = calculaDistancia(i, jj)
-                                if distanciaAntenaJaAlocada < distancia:
+                                if distanciaAntenaJaAlocada < distancia: # Caso a nova antena atenda melhor o ponto de demanda
                                     indice = -1
-                                    for ii in B1:
-                                        p = ii[0]
+                                    for ii in B1: # For apenas para encontrar o indice do ponto de deanda, para alterar a nova antena que melhor atende
+                                        antena = ii[0]
                                         indice +=1
-                                        if p == i:
-                                            B1[indice] = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
-                                            distancia = distanciaAntenaJaAlocada
+                                        if antena == i:
+                                            B1[indice] = (i, jj)  # Faz a troca para a antena ja alocada anteriormente q atende melhor o ponto i
+                                            distancia = distanciaAntenaJaAlocada # Para poder continuar a verificação
 
                 f += calculaScore(j, B0, D)
         else:
@@ -197,12 +177,23 @@ if isEntrou == False:
     print('Aplicar GRASP em todas as instâncias use: python alocacaoAntenaGRASP <T> <percentual de aleatoriedade, valor entre 0 e 1>')
     sys.exit(1)
 
-    # for i, antena in B1:  # Verificar se a antena atual atende melhor algum ponto de demanda ja atendido por outra antena, adicionando junto no score
-    #     distancia = calculaDistancia(i, j)
-    #     if distancia <= D:
-    #         score += 1 / distancia
-    #         B1[(i, antena)] = i, j  # Atualiza o ponto de demanda atendido, agora de forma mais próxima de outra antena
-    #         # AQUI PRECISA REMOVER o score da antena referente o ponto q n sera mais atendido por ela
+    # # Verifica se existe antena já alocada (A1) mais próxima do ponto de demanda em B0
+    # antena_mais_proxima = min(A1, key=lambda a: calculaDistancia(i, a), default=None)
+    #
+    # if antena_mais_proxima is not None:
+    #     distancia_atual = calculaDistancia(i, antena_mais_proxima)
+    #     if distancia_atual < distancia:
+    #         # Atualiza a antena que está atendendo o ponto
+    #         ponto_atendido = next((p for p, a in B1 if p == i), None)
+    #         if ponto_atendido is not None:
+    #             B1.remove((ponto_atendido, j))
+    #             B1.append((ponto_atendido, antena_mais_proxima))
+    #
+    #         # Remove o score equivalente da antena antiga
+    #         f -= calculaScore(j, [i], D)
+    #
+    #         # Adiciona o score da nova antena
+    #         f += calculaScore(antena_mais_proxima, [i], D)
 
     # def busca_local_simples(A1, f_value, nx, ny, mx, my, D):
     #     while True:
