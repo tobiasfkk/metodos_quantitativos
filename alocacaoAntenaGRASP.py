@@ -119,15 +119,15 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                                 # Adiciona o score da nova antena
                                 f += calculaScore(antena_mais_proxima, [i], D)
 
-                for jj in A1:  # Antenas já alocadas
-                    distanciaAntenaJaAlocada = calculaDistancia(i, jj)
-                    if distanciaAntenaJaAlocada < distancia:
-                        for ii in B1:
-                            p = B1[ii].split(',')
-                            p = p[0]
-                            if p == i:
-                                B1[ii] = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
-                                distancia = distanciaAntenaJaAlocada
+                        for jj in A1:  # Antenas já alocadas
+                            distanciaAntenaJaAlocada = calculaDistancia(i, jj)
+                            if distanciaAntenaJaAlocada < distancia:
+                                for ii in B1:
+                                    p = B1[ii].split(',')
+                                    p = p[0]
+                                    if p == i:
+                                        B1[ii] = (i, jj)  # Faz a troca para a anteja ja alocada anteriormente q atende melhor o ponto i
+                                        distancia = distanciaAntenaJaAlocada
 
                 f += calculaScore(j, B0, D)
         else:
