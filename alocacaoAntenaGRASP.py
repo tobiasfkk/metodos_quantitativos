@@ -123,6 +123,11 @@ def construcaoSemiGulosa(percentualAleatoriedade):
     for j in A0removidos:
         A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
 
+    A1, A0, B1, B0, A0Final, B0Final = buscaLocal(A1, A0, B1, B0, A0Final, B0Final)
+
+    return A1, A0, B1, B0, A0Final, B0Final
+
+def buscaLocal(A1, A0, B1, B0, A0Final, B0Final):
     return A1, A0, B1, B0, A0Final, B0Final
 
 def print_allocation(A1, B1):
