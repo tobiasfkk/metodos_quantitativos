@@ -111,20 +111,10 @@ def construcaoSemiGulosa(percentualAleatoriedade):
                     scorejj += 1 / distanciajj
                     A1[indicejj] = (jj,scorejj) # Atualiza o score da antena que recebeu um novo ponto de demanda
 
-                    for indiceAntena, antena in enumerate(A1):
-                        scorej = antena[1]
-                        antena = antena[0]
-                        if antena == j:
-                            novoScore = 1 / distanciaj #AQUI ESTA QUEBRANDO POR CONTA DE UM NUMERO MUITO PEQUENO, APOS CORRIGIR, CONFERIR A LINHA 127...
-                            scorej -= novoScore
-                            A1[indiceAntena] = (antena,scorej)
-                            break
-
-    # Se a antena não atende mais nenhum ponto de demanda pois foram todos atendidos de forma melhor por outra antena, esta é removida
+    # Se a antena alocada não atende mais nenhum ponto de demanda pois foram todos atendidos de forma melhor por outra antena, esta é removida
     A1remove = []
     for j in A1:
-        score = j[1]
-        if score < 0000000000.1:
+        if not any(j[0] == i[1] for i in B1): # Verificando se o número da antena não está presente no segundo termo de toda túpula
             A1remove.append((j))  # Armazena os antenas que não atendem nenhum ponto de demanda
             A0removidos.append((j))  # Armazena os antenas que não atendem nenhum ponto de demanda para adicionar ao conjunto de antenas nao alocadas posteriormente
 
