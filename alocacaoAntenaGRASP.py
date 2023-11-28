@@ -134,18 +134,32 @@ def construcaoSemiGulosa(percentualAleatoriedade):
 def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
 
     if len(A1) > 1: # Se tiver apenas uma antena, não faz sentido remover ela
-        for j in A1: # Para cada antena alocada
-            A1.remove(j) # Remove a antena
-            B1remove = []
 
+        A1remove = []
+        for j in A1: # Para cada antena alocada
+            A1remove.append(j) # Adiciona a antena para remoção
+            A0.append(j) # Coloca a antena no array de não alocadas
+            j = j[0] # Retira apenas o primeiro termo que é o índice da antena
+            A0Final[j] # Identifica a antena como não alocada no array final
+
+            B1remove = []
             for i in B1: # Para todos os pontos de demanda atendidos
-                B1remove.append(i)
-                B0.append(i) # Coloca o ponto de demanda no array de não atendidos
-                i = i[0] # Pega apenas o indice da antena que está no primeiro termo - exemplo: [(pontodemanda, antena),(pontodemanda, antena),(pontodemanda, antena)]
-                B0Final[i] = 0 # Identifica o ponto de demanda como não atendido no array final
+                if i[1] == j: # Se o segundo termo do ponto alocado é a antena
+                    B1remove.append(i) # Adiciona o ponto para remoção
+                    B0.append(i) # Coloca o ponto de demanda no array de não atendidos
+                    i = i[0] # Pega apenas o indice da antena que está no primeiro termo - exemplo: [(pontodemanda, antena),(pontodemanda, antena),(pontodemanda, antena)]
+                    B0Final[i] = 0 # Identifica o ponto de demanda como não atendido no array final
 
             for i in B1remove:
                 B1.remove(i)  # Remove ponto de demanda pois foi desatendido
+
+            # ao final de cada for da antena, precisa verificar a funcao objetivo
+            fnova = 1
+            if fnova > f:
+                f = fnova
+
+        for j in A1remove:
+            A1.remove(j)  # Remove a antena
 
     return A1, A0, B1, B0, A0Final, B0Final
 
