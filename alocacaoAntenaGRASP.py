@@ -148,7 +148,6 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
             A1remove.append(j) # Adiciona a antena para remoção
             A0.append(j) # Coloca a antena no array de não alocadas
             j = j[0] # Retira apenas o primeiro termo que é o índice da antena
-            A0Final[j] # Identifica a antena como não alocada no array final
 
             B1remove = []
             for i in B1: # Para todos os pontos de demanda atendidos
@@ -168,12 +167,14 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
                 melhorA0 = A0
                 melhorB1 = B1
                 melhorB0 = B0
-                melhorA0Final = A0Final
+
                 melhorB0Final = B0Final
                 melhorf = f
+                A0Final[j]  # Identifica a antena como não alocada no array final
+                melhorA0Final = A0Final
 
-        # for j in A1remove:
-        #     A1.remove(j)  # Remove a antena
+        for j in A1remove:
+            A1.remove(j)  # Remove a antena
 
     return melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, f
 
