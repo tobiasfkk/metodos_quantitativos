@@ -143,17 +143,13 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
 
     if len(A1) > 1: # Se tiver apenas uma antena, não faz sentido remover ela
 
-        A1remove = []
         for j in A1: # Para cada antena alocada
-            A1remove.append(j) # Adiciona a antena para remoção
-            A0.append(j) # Coloca a antena no array de não alocadas
-            j = j[0] # Retira apenas o primeiro termo que é o índice da antena
-            A0Final[j] # Identifica a antena como não alocada no array final
+            antena = j[0] # índice da antena é apenas o primeiro termo
 
             B1remove = []
             for i in B1: # Para todos os pontos de demanda atendidos
-                if i[1] == j: # Se o segundo termo do ponto alocado é a antena
-                    B1remove.append(i) # Adiciona o ponto para remoção
+                if i[1] == antena: # Se o segundo termo do ponto alocado é a antena
+                    B1remove.append(i) # Adiciona o ponto de demanda para remoção
                     B0.append(i) # Coloca o ponto de demanda no array de não atendidos
                     i = i[0] # Pega apenas o indice da antena que está no primeiro termo - exemplo: [(pontodemanda, antena),(pontodemanda, antena),(pontodemanda, antena)]
                     B0Final[i] = 0 # Identifica o ponto de demanda como não atendido no array final
@@ -163,17 +159,17 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
 
             # ao final de cada for da antena, precisa verificar a funcao objetivo
             f = 1 #nova funcao objetivo
+
             if f > melhorf:
-                melhorA1 = A1
-                melhorA0 = A0
                 melhorB1 = B1
                 melhorB0 = B0
-                melhorA0Final = A0Final
                 melhorB0Final = B0Final
                 melhorf = f
+                antenaremovida = antena
 
-        # for j in A1remove:
-        #     A1.remove(j)  # Remove a antena
+        A0.append(antenaremovida) # Adiciona a antena removida ao array de não alocadas
+        A1.remove(j)  # Remove a antena das antenas alocadas
+        A0Final[antenaremovida]  # Identifica a antena como não alocada no array final
 
     return melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, f
 
