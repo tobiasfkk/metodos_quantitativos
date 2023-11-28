@@ -133,6 +133,14 @@ def construcaoSemiGulosa(percentualAleatoriedade):
 
 def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
 
+    melhorA1 = A1
+    melhorA0 = A0
+    melhorB1 = B1
+    melhorB0 = B0
+    melhorA0Final = A0Final
+    melhorB0Final = B0Final
+    melhorf = f
+
     if len(A1) > 1: # Se tiver apenas uma antena, não faz sentido remover ela
 
         A1remove = []
@@ -154,14 +162,20 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
                 B1.remove(i)  # Remove ponto de demanda pois foi desatendido
 
             # ao final de cada for da antena, precisa verificar a funcao objetivo
-            fnova = 1
-            if fnova > f:
-                f = fnova
+            f = 1 #nova funcao objetivo
+            if f > melhorf:
+                melhorA1 = A1
+                melhorA0 = A0
+                melhorB1 = B1
+                melhorB0 = B0
+                melhorA0Final = A0Final
+                melhorB0Final = B0Final
+                melhorf = f
 
-        for j in A1remove:
-            A1.remove(j)  # Remove a antena
+        # for j in A1remove:
+        #     A1.remove(j)  # Remove a antena
 
-    return A1, A0, B1, B0, A0Final, B0Final
+    return melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, f
 
 def print_allocation(A1, B1):
     print("Resultado da Alocação das Antenas:")
