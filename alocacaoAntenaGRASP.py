@@ -124,52 +124,60 @@ def construcaoSemiGulosa(percentualAleatoriedade):
         A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
 
     # CALCULAR O VALOR DA FUNCAO OBJETIVO Q A FASE CONTRUCAO GEROU
-    K = 1
-    f = K*len(B1) - C*len(A1) #aqui continua...
-
+    # K = 1
+    # f = K*len(B1) - C*len(A1) #aqui continua...
+    f = 1
     A1, A0, B1, B0, A0Final, B0Final, f = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f)
-
+    f = 1
     return A1, A0, B1, B0, A0Final, B0Final, f
 
 def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
 
-    melhorA1 = A1
-    melhorA0 = A0
-    melhorB1 = B1
-    melhorB0 = B0
-    melhorA0Final = A0Final
-    melhorB0Final = B0Final
-    melhorf = f
-
     if len(A1) > 1: # Se tiver apenas uma antena, não faz sentido remover ela
+
+        melhorA1 = A1
+        melhorA0 = A0
+        melhorB1 = B1
+        melhorB0 = B0
+        melhorA0Final = A0Final
+        melhorB0Final = B0Final
+        melhorf = f
 
         for j in A1: # Para cada antena alocada
             antena = j[0] # índice da antena é apenas o primeiro termo
+            A0.append(j)  # Adiciona a antena removida ao array de não alocadas
+            A1.remove(j)  # Remove a antena do array das antenas alocadas
+            A0Final[antena]  # Identifica a antena como não alocada no array final
 
             B1remove = []
             for i in B1: # Para todos os pontos de demanda atendidos
                 if i[1] == antena: # Se o segundo termo do ponto alocado é a antena
                     B1remove.append(i) # Adiciona o ponto de demanda para remoção
-                    B0.append(i) # Coloca o ponto de demanda no array de não atendidos
-                    i = i[0] # Pega apenas o indice da antena que está no primeiro termo - exemplo: [(pontodemanda, antena),(pontodemanda, antena),(pontodemanda, antena)]
-                    B0Final[i] = 0 # Identifica o ponto de demanda como não atendido no array final
 
             for i in B1remove:
                 B1.remove(i)  # Remove ponto de demanda pois foi desatendido
+                B0.append(i)  # Coloca o ponto de demanda no array de não atendidos
+                i = i[0]  # Pega apenas o indice da antena que está no primeiro termo - exemplo: [(pontodemanda, antena),(pontodemanda, antena),(pontodemanda, antena)]
+                B0Final[i] = 0  # Identifica o ponto de demanda como não atendido no array final
 
-            # ao final de cada for da antena, precisa verificar a funcao objetivo
             f = 1 #nova funcao objetivo
 
-            if f > melhorf:
+            if f > melhorf: # Se a funcao encontrada for melhor que a melhor funcao
+                melhorA1 = A1
+                melhorA0 = A0
                 melhorB1 = B1
                 melhorB0 = B0
+                melhorA0Final = A0Final
                 melhorB0Final = B0Final
                 melhorf = f
-                antenaremovida = antena
-
-        A0.append(antenaremovida) # Adiciona a antena removida ao array de não alocadas
-        A1.remove(j)  # Remove a antena das antenas alocadas
-        A0Final[antenaremovida]  # Identifica a antena como não alocada no array final
+            else: # Se não for melhor, retorna o valor das variáveis ao valor inicial
+                A1 = melhorA1
+                A0 = melhorA0
+                B1 = melhorB1
+                B0 = melhorB0
+                A0Final = melhorA0Final
+                B0Final = melhorB0Final
+                f = melhorf
 
     return melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, f
 
