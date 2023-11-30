@@ -125,6 +125,7 @@ def construcaoSemiGulosa(percentualAleatoriedade):
 
     # CALCULAR O VALOR DA FUNCAO OBJETIVO Q A FASE CONTRUCAO GEROU
     # K = 1
+
     # f = K*len(B1) - C*len(A1) #aqui continua...
     f = 1
     A1, A0, B1, B0, A0Final, B0Final, f = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f)
@@ -142,6 +143,8 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
         melhorA0Final = A0Final
         melhorB0Final = B0Final
         melhorf = f
+
+
 
         for j in A1: # Para cada antena alocada
             antena = j[0] # índice da antena é apenas o primeiro termo
