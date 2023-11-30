@@ -62,29 +62,29 @@ def grasp(percentualAleatoriedade):
 
     i = 0
     while (i < maxIteracoes):
-        A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, f = construcaoSemiGulosa(percentualAleatoriedade, K)
-        A1, A0, B1, B0, A0Final, B0Final, f = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, K, f)
+        A1, A0, B1, B0, A0Final, B0Final, f = construcaoSemiGulosa(percentualAleatoriedade, K)
+        melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, melhorf = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, K, f)
 
-        if i == 0:
-            melhorA1 = A1
-            melhorA0 = A0
-            melhorB1 = B1
-            melhorB0 = B0
-            melhorA0Final = A0Final
-            melhorB0Final = B0Final
-            melhorf = f
-        elif f > melhorf:
-            melhorA1 = A1
-            melhorA0 = A0
-            melhorB1 = B1
-            melhorB0 = B0
-            melhorA0Final = A0Final
-            melhorB0Final = B0Final
-            melhorf = f
+        if i == 0: # Primeira vez vai ser a melhor solucao após a busca local
+            graspA1 = melhorA1
+            graspA0 = melhorA0
+            graspB1 = melhorB1
+            graspB0 = melhorB0
+            graspA0Final = melhorA0Final
+            graspB0Final = melhorB0Final
+            graspf = melhorf
+        elif melhorf > graspf:
+            graspA1 = melhorA1
+            graspA0 = melhorA0
+            graspB1 = melhorB1
+            graspB0 = melhorB0
+            graspA0Final = melhorA0Final
+            graspB0Final = melhorB0Final
+            graspf = melhorf
 
         i += 1
 
-    return melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, melhorf
+    return graspA1, graspA0, graspB1, graspB0, graspA0Final, graspB0Final, graspf
 
 def construcaoSemiGulosa(percentualAleatoriedade, K):
 
@@ -172,9 +172,11 @@ def construcaoSemiGulosa(percentualAleatoriedade, K):
 
     somatorioMinimaDistancia = retornaDistanciaMinima(pontosDemanda,A1)
     f = K*len(B1) - C*len(A1) - somatorioMinimaDistancia
-    return A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, f
+    return A1, A0, B1, B0, A0Final, B0Final, f
 
-def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, K, f):
+def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, K, f):
+
+    pontosDemanda = list(range(B))
 
     melhorA1 = A1.copy()
     melhorA0 = A0.copy()
