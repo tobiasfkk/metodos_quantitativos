@@ -20,14 +20,16 @@ Parâmetros de entrada:
     <instâncias grandes> = unidade numérica
     <pontos demanda instâncias grandes> = unidade numérica
     <locais candidatos instâncias grandes> = unidade numérica
+    <máximo de iterações grasp>  = valor máximo de iterações do GRASP
+    <valor K da função objetivo> = Peso K presente na função objetico
 
 Uso: 
 
-    python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias grandes> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes>
+    python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias grandes> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes> <máximo de iterações grasp> <valor K da função objetivo>
 
 Exemplo: 
 
-    python geradorInstancia.py 33000 30000 7000 10000 5 30 30 5 100 100
+    python geradorInstancia.py 33000 30000 7000 10000 5 30 30 5 100 100 1000 1
 
 Executando pelo terminal o comando do exemplo acima, serão gerados dois grupos de instâncias, pequenas e grandes.
 
@@ -46,7 +48,7 @@ As intâncias serão criadas no caminho *.../métodos_quantitativos/instancias* 
 
 Usando de exemplo o conteúdo de instanciaPequena1.txt:
 
-    A 10 B 10 C 7000 D 10000
+    A 10 B 10 C 7000 D 10000 mi 1000 K 1
     n 26788 8132
     n 22363 20166
     n 30812 3771
@@ -76,6 +78,8 @@ Definições:
     D = Alcance das antenas
     n = <Coordenada x do ponto de demanda> <Coordenada y do ponto de demanda>
     m = <Coordenada x do local candidato> <Coordenada y do local candidato>
+    mi = Máximo de iterações do GRASP
+    K = Peso K da função objetivo
 
 Os valores m e n são gerados aleatoriamente respeitando os valores de comprimento e largura especificados.
 

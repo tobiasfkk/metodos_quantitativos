@@ -6,7 +6,7 @@ instancia = sys.argv[1]
 percentualAleatoriedade = float(sys.argv[2])
 
 def leituraInstancia(instancia):
-    global A, B, C, D, mx, my, nx, ny
+    global A, B, C, D, maxIteracoes, K, mx, my, nx, ny
     nx = []
     ny = []
     mx = []
@@ -19,6 +19,8 @@ def leituraInstancia(instancia):
             B = int(line.split(' ')[3])
             C = int(line.split(' ')[5])
             D = int(line.split(' ')[7])
+            maxIteracoes = int(line.split(' ')[9])
+            K = int(line.split(' ')[11])
             first = False
             continue
         if (line.split(' ')[0] == 'n'):
@@ -56,17 +58,32 @@ def retornaDistanciaMinima(pontosDemanda,A1): #Soma a distancia de todos os pont
         somatorioMinimaDistancia += minimaDistancia
     return somatorioMinimaDistancia
 
-def grasp(percentualAleatoriedade):
-    K = -1
-    A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, f = construcaoSemiGulosa(percentualAleatoriedade, K)
-    A1, A0, B1, B0, A0Final, B0Final, f = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, K, f)
-    melhorA1 = A1
-    melhorA0 = A0
-    melhorB1 = B1
-    melhorB0 = B0
-    melhorA0Final = A0Final
-    melhorB0Final = B0Final
-    melhorf = f
+def grasp(percentualAleatoriedade, maxIteracoes, K):
+
+    i = 0
+    while (i < maxIteracoes):
+        A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, f = construcaoSemiGulosa(percentualAleatoriedade, K)
+        A1, A0, B1, B0, A0Final, B0Final, f = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, K, f)
+
+        if i == 0:
+            melhorA1 = A1
+            melhorA0 = A0
+            melhorB1 = B1
+            melhorB0 = B0
+            melhorA0Final = A0Final
+            melhorB0Final = B0Final
+            melhorf = f
+        elif f > melhorf:
+            melhorA1 = A1
+            melhorA0 = A0
+            melhorB1 = B1
+            melhorB0 = B0
+            melhorA0Final = A0Final
+            melhorB0Final = B0Final
+            melhorf = f
+
+        i += 1
+
     return melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, melhorf
 
 def construcaoSemiGulosa(percentualAleatoriedade, K):
@@ -238,7 +255,7 @@ if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ')
-        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade) # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade, maxIteracoes, K) # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas: ", len(A1))
         print(" - Antenas não alocadas: ", len(A0))
         print(" - Pontos de demanda atendidos: ", len(B1))
@@ -255,7 +272,7 @@ else:
     for instance in glob(f'./instancias/{instancia}'):
         leituraInstancia(instance)
         print("Instância " + instance[instance.rindex("/") + 1:] + ": ")
-        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade)  # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade, maxIteracoes, K)  # Chamada da heurística construtiva semi-gulosa
         print(" - Antenas alocadas:", len(A1))
         print(" - Antenas não alocadas:", len(A0))
         print(" - Pontos de demanda atendidos:", len(B1))
