@@ -159,17 +159,15 @@ def construcaoSemiGulosa(percentualAleatoriedade, K):
 
 def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, K, f):
 
+    melhorA1 = A1.copy()
+    melhorA0 = A0.copy()
+    melhorB1 = B1.copy()
+    melhorB0 = B0.copy()
+    melhorA0Final = A0Final.copy()
+    melhorB0Final = B0Final.copy()
+    melhorf = f
+
     if len(A1) > 1: # Se tiver apenas uma antena, não faz sentido remover ela
-
-        A1 = A1
-
-        melhorA1 = A1.copy()
-        melhorA0 = A0.copy()
-        melhorB1 = B1.copy()
-        melhorB0 = B0.copy()
-        melhorA0Final = A0Final.copy()
-        melhorB0Final = B0Final.copy()
-        melhorf = f
 
         auxA1 = A1.copy()
         auxA0 = A0.copy()
@@ -179,20 +177,17 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, pontosDemanda, K, f):
         auxB0Final = B0Final.copy()
         auxf = f
 
-        j = 0
-        n = len(A1)
+        A1copy = A1.copy()
 
-        while j < n:
-            antena = A1[j]
-            auxA0.append(antena)  # Adiciona a antena removida ao array de não alocadas
-            auxA1.remove(antena)  # Remove a antena do array das antenas alocadas
-            antena = antena[0] # índice da antena é apenas o primeiro termo
-            auxA0Final[antena] = 0  # Identifica a antena como não alocada no array final
-            j += 1
+        for j in A1copy:
+            auxA0.append(j)  # Adiciona a antena removida ao array de não alocadas
+            auxA1.remove(j)  # Remove a antena do array das antenas alocadas
+            j = j[0] # índice da antena é apenas o primeiro termo
+            auxA0Final[j] = 0  # Identifica a antena como não alocada no array final
 
             B1remove = []
             for i in auxB1: # Para todos os pontos de demanda atendidos
-                if i[1] == antena: # Se o segundo termo do ponto alocado é a antena
+                if i[1] == j: # Se o segundo termo do ponto alocado é a antena
                     B1remove.append(i) # Adiciona o ponto de demanda para remoção
 
             for i in B1remove:
