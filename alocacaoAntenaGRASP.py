@@ -40,16 +40,33 @@ def calculaScore(j, B0, D):
                 score += 1 / distancia
     return score
 
+def retornaDistanciaMinima(pontosDemanda,A1): #Soma a distancia de todos os pontos de demanda(alocados ou nao) á antena alocada mais próxima)
+    somatorioMinimaDistancia = 0
+    for i in pontosDemanda: #B - todos os pontos de demanda, atendidos ou nao
+        distancia = 0
+        minimaDistancia = 0
+        for j in A1: # ntenas alocadas
+            j = j[0] # antena está no primeiro termo
+            if minimaDistancia == 0: # apenas primeira vez
+                minimaDistancia = calculaDistancia(i, j)
+            else:
+                distancia = calculaDistancia(i, j)
+            if distancia < minimaDistancia and distancia != 0:
+                minimaDistancia = distancia
+        somatorioMinimaDistancia += minimaDistancia
+    return somatorioMinimaDistancia
+
 def construcaoSemiGulosa(percentualAleatoriedade):
 
-    # Antenas nao alocadas
-    A0 = list(range(A))
+
+    A0 = list(range(A) )# Antenas nao alocadas
     for j in A0:
         A0[j] = (j,0) # Adiciona o score 0 para todas as antenas
 
     A1 = [] # Antenas alocadas
     A0Final = [0] * A # Constrói o array vazio que será utilizado no final
     B0 = list(range(B)) # Pontos de demanda não atendidos
+    pontosDemanda = list(range(B))
     B1 = [] # Pontos de demanda atendidos
     B0Final = [0] * B # Constrói o array vazio que será utilizado no final
     A0removidos =[]
@@ -123,13 +140,11 @@ def construcaoSemiGulosa(percentualAleatoriedade):
     for j in A0removidos:
         A0.append(j) # Adiciona novamente a antena que não atendeu nenhum ponto de demanda ao conjunto de antenas não alocadas
 
-    # CALCULAR O VALOR DA FUNCAO OBJETIVO Q A FASE CONTRUCAO GEROU
-    # K = 1
 
-    # f = K*len(B1) - C*len(A1) #aqui continua...
-    f = 1
+    K = 1
+    somatorioMinimaDistancia = retornaDistanciaMinima(pontosDemanda,A1)
+    f = K*len(B1) - C*len(A1) - somatorioMinimaDistancia
     A1, A0, B1, B0, A0Final, B0Final, f = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f)
-    f = 1
     return A1, A0, B1, B0, A0Final, B0Final, f
 
 def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
@@ -143,7 +158,6 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, f):
         melhorA0Final = A0Final
         melhorB0Final = B0Final
         melhorf = f
-
 
 
         for j in A1: # Para cada antena alocada
