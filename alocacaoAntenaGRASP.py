@@ -58,7 +58,7 @@ def retornaDistanciaMinima(pontosDemanda,A1): #Soma a distancia de todos os pont
         somatorioMinimaDistancia += minimaDistancia
     return somatorioMinimaDistancia
 
-def grasp(percentualAleatoriedade, maxIteracoes, K):
+def grasp(percentualAleatoriedade):
 
     i = 0
     while (i < maxIteracoes):
@@ -255,7 +255,7 @@ if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ')
-        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade, maxIteracoes, K) # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade) # Chamada do GRASP
         print(" - Antenas alocadas: ", len(A1))
         print(" - Antenas não alocadas: ", len(A0))
         print(" - Pontos de demanda atendidos: ", len(B1))
@@ -272,7 +272,7 @@ else:
     for instance in glob(f'./instancias/{instancia}'):
         leituraInstancia(instance)
         print("Instância " + instance[instance.rindex("/") + 1:] + ": ")
-        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade, maxIteracoes, K)  # Chamada da heurística construtiva semi-gulosa
+        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade)  # Chamada do GRASP
         print(" - Antenas alocadas:", len(A1))
         print(" - Antenas não alocadas:", len(A0))
         print(" - Pontos de demanda atendidos:", len(B1))
