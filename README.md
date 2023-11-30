@@ -27,9 +27,13 @@ Uso:
 
     python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias grandes> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes> <máximo de iterações grasp> <valor K da função objetivo>
 
-Exemplo: 
+Exemplo1: 
 
     python geradorInstancia.py 33000 30000 7000 10000 5 30 30 5 100 100 1000 100000
+
+Exemplo2:
+
+    python geradorInstancia.py 33000 30000 7000 10000 8 50 10 8 400 50 10000 100000
 
 Executando pelo terminal o comando do exemplo acima, serão gerados dois grupos de instâncias, pequenas e grandes.
 

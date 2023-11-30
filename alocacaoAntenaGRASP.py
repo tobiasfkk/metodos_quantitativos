@@ -1,6 +1,7 @@
 import sys
 from glob import glob
 import random
+import time
 
 instancia = sys.argv[1]
 percentualAleatoriedade = float(sys.argv[2])
