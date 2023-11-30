@@ -33,7 +33,7 @@ Exemplo1:
 
 Exemplo2:
 
-    python geradorInstancia.py 33000 30000 7000 10000 8 50 10 8 400 50 10000 100000
+    python geradorInstancia.py 33000 30000 7000 10000 8 98 25 8 403 56 10000 100000
 
 Executando pelo terminal o comando do exemplo acima, serão gerados dois grupos de instâncias, pequenas e grandes.
 
