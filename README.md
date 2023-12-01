@@ -21,21 +21,21 @@ Parâmetros de entrada:
     <pontos demanda instâncias grandes> = unidade numérica
     <locais candidatos instâncias grandes> = unidade numérica
     <máximo de iterações grasp>  = valor máximo de iterações do GRASP
-    <valor K da função objetivo> = Peso K presente na função objetico
+    <valor K da função objetivo> = Peso K presente na função objetivo
 
 Uso: 
 
     python geradorInstancia.py <comprimento da área> <largura da área> <custo das antenas> <alcance das antenas> <instâncias pequenas> <pontos demanda instâncias pequenas> <locais candidatos instâncias pequenas> <instâncias grandes> <pontos demanda instâncias grandes> <locais candidatos instâncias grandes> <máximo de iterações grasp> <valor K da função objetivo>
 
-Exemplo1: 
+Exemplo 1: 
 
     python geradorInstancia.py 33000 30000 7000 10000 5 30 30 5 100 100 1000 100000
 
-Exemplo2:
+Exemplo 2:
 
     python geradorInstancia.py 33000 30000 7000 10000 8 98 25 8 403 56 10000 100000
 
-Executando pelo terminal o comando do exemplo acima, serão gerados dois grupos de instâncias, pequenas e grandes.
+Executando pelo terminal algum dos comandos exemplificados acima, serão gerados dois grupos de instâncias, pequenas e grandes.
 
 As intâncias serão criadas no caminho *.../métodos_quantitativos/instancias* e estarão ordenadas pelo nome, exemplo:
 
@@ -50,7 +50,7 @@ As intâncias serão criadas no caminho *.../métodos_quantitativos/instancias* 
     instanciaPequena4.txt
     instanciaPequena5.txt
 
-Usando de exemplo o conteúdo de instanciaPequena1.txt:
+Usando de exemplo o conteúdo(fictício) de instanciaPequena1.txt:
 
     A 10 B 10 C 7000 D 10000 mi 1000 K 1
     n 26788 8132
@@ -89,8 +89,33 @@ Os valores m e n são gerados aleatoriamente respeitando os valores de comprimen
 
 Cada execução do gerador exclui as instâncias existentes da pasta e gera novos arquivos .txt.
 
+# Resolvendo instância(s) a partir do modelo matemático GLPK
 
-# Aplicando GRASP na(s) instância(s)
+Uso:
+    
+- Aplicando modelo matemático em uma instância específica:
+
+      python alocacaoAntena.py <nome da instancia>.txt
+
+- Aplicando modelo matemático em todas as instâncias:
+
+      python alocacaoAntena.py T 
+
+Exemplo:
+    
+- Aplicando modelo matemático em uma instância específica:
+
+      python alocacaoAntena.py instanciaPequena1.txt
+
+- Aplicando modelo matemático em todas as instâncias:
+
+      python alocacaoAntena.py T
+
+Lembrando que só é possível aplicar a heurística nas instâncias presentes no caminho:
+
+    .../métodos_quantitativos/instancias
+
+# Resolvendo instância(s) a partir do GRASP
  
 Uso:
     
@@ -121,4 +146,5 @@ Parâmetros de entrada:
     <percentual de aleatoriedade> = percentual da aleatoriedade aplicada na heurística construtiva - valor entre 0 e 1
 
 0 = 0% ALEATÓRIO
+
 1 = 100% ALEATÓRIO
