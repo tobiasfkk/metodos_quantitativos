@@ -89,7 +89,7 @@ Os valores m e n são gerados aleatoriamente respeitando os valores de comprimen
 
 Cada execução do gerador exclui as instâncias existentes da pasta e gera novos arquivos .txt.
 
-# Resolvendo instância(s) a partir do modelo matemático GLPK
+# Resolvendo instância(s) - modelo matemático - GLPK
 
 Uso:
     
@@ -115,7 +115,11 @@ Lembrando que só é possível aplicar a heurística nas instâncias presentes n
 
     .../métodos_quantitativos/instancias
 
-# Resolvendo instância(s) a partir do GRASP
+Parâmetros de entrada:
+
+    <nome da instância> = nome do arquivo texto localizado no caminho .../métodos_quantitativos/instancias
+
+# Resolvendo instância(s) - GRASP
  
 Uso:
     
