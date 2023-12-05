@@ -65,6 +65,15 @@ def grasp(percentualAleatoriedade):
     while (i < maxIteracoes):
         A1, A0, B1, B0, A0Final, B0Final, f = construcaoSemiGulosa(percentualAleatoriedade, K)
         melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, melhorf = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, K, f)
+        while melhorf > f: # Enquanto a busca local obtiver um resultado melhor que o anterior
+            A1 = melhorA1
+            A0 = melhorA0
+            B1 = melhorB1
+            B0 = melhorB0
+            A0Final = melhorA0Final
+            B0Final = melhorB0Final
+            f = melhorf
+            melhorA1, melhorA0, melhorB1, melhorB0, melhorA0Final, melhorB0Final, melhorf = buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, K, f)
 
         if i == 0: # Primeira vez vai ser a melhor solucao após a busca local
             graspA1 = melhorA1
@@ -198,7 +207,6 @@ def buscaLocalSimples(A1, A0, B1, B0, A0Final, B0Final, K, f):
         auxf = f
 
         A1copy = A1.copy()
-
         for j in A1copy:
             auxA0.append(j)  # Adiciona a antena removida ao array de não alocadas
             auxA1.remove(j)  # Remove a antena do array das antenas alocadas
