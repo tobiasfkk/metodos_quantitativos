@@ -2,6 +2,7 @@ import sys
 from glob import glob
 import random
 import time
+import matplotlib.pyplot as plt
 
 instancia = sys.argv[1]
 percentualAleatoriedade = float(sys.argv[2])
@@ -261,22 +262,57 @@ def print_allocation(A1, B1):
         else:
             print(f' - Ponto de demanda {i + 1}: Não Atendido')
 
-isEntrou = False # validadação de erro
+
+def gerar_grafico(A1, B1):
+    plt.figure(figsize=(12, 8))  # Increase figure size
+
+    # Plotting allocated and non-allocated antennas
+    antenas_alocadas_x = [mx[j[0]] for j in A1]
+    antenas_alocadas_y = [my[j[0]] for j in A1]
+    plt.scatter(antenas_alocadas_x, antenas_alocadas_y, color='green', label='Antenas Alocadas', marker='o', s=50)
+
+    antenas_nao_alocadas_x = [mx[j] for j in range(A) if j not in [antena[0] for antena in A1]]
+    antenas_nao_alocadas_y = [my[j] for j in range(A) if j not in [antena[0] for antena in A1]]
+    plt.scatter(antenas_nao_alocadas_x, antenas_nao_alocadas_y, color='gray', label='Antenas Não Alocadas', marker='o', s=50)
+
+    # Plotting demand points
+    plt.scatter(nx, ny, color='blue', label='Pontos de Demanda', marker='x', s=20)
+
+    # Connecting attended demand points with antennas
+    for ponto_demanda, antena in B1:
+        plt.plot([nx[ponto_demanda], mx[antena]], [ny[ponto_demanda], my[antena]], color='gray', linestyle='--', linewidth=0.5)
+
+    # Identifying and plotting unattended demand points
+    pontos_nao_atendidos_x = [nx[i] for i in range(B) if not any(ponto_demanda == i for ponto_demanda, _ in B1)]
+    pontos_nao_atendidos_y = [ny[i] for i in range(B) if not any(ponto_demanda == i for ponto_demanda, _ in B1)]
+    plt.scatter(pontos_nao_atendidos_x, pontos_nao_atendidos_y, color='red', label='Pontos de Demanda Não Atendidos', marker='x', s=20)
+
+    plt.title('Alocação de Antenas e Cobertura de Pontos de Demanda')
+    plt.xlabel('Coordenada X')
+    plt.ylabel('Coordenada Y')
+    plt.legend(loc='upper right')
+    plt.grid(True)
+    plt.show()
+
+
+# Chamando a função gráfica ao final
+isEntrou = False  # validadação de erro
 if instancia == 'T' or instancia == 't':
     for instance in glob('./instancias/*'):
         leituraInstancia(instance)
         print(instance[instance.rindex('/') + 1:] + ': ')
-        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade) # Chamada do GRASP
+        A1, A0, B1, B0, A0Final, B0Final, f = grasp(percentualAleatoriedade)  # Chamada do GRASP
         print(" - Antenas alocadas: ", len(A1))
         print(" - Antenas não alocadas: ", len(A0))
         print(" - Pontos de demanda atendidos: ", len(B1))
         print(" - Pontos de demanda não atendidos: ", len(B0))
-        print(" - Valor da função objeivo: ", f)
+        print(" - Valor da função objetivo: ", f)
         print(" - Custo total:", len(A1) * C)
         print(" - Antenas:", A0Final)
         print(" - Pontos de demanda:", B0Final)
         print("")
         print_allocation(A1, B1)
+        gerar_grafico(A1, B1)
         print("")
         isEntrou = True
 else:
@@ -288,14 +324,12 @@ else:
         print(" - Antenas não alocadas:", len(A0))
         print(" - Pontos de demanda atendidos:", len(B1))
         print(" - Pontos de demanda não atendidos:", len(B0))
-        print(" - Valor da função objeivo: ", f)
+        print(" - Valor da função objetivo:", f)
         print(" - Custo total:", len(A1) * C)
         print(" - Antenas:", A0Final)
         print(" - Pontos de demanda:", B0Final)
-        print("")
         print_allocation(A1, B1)
-        print("")
-        isEntrou = True
+        gerar_grafico(A1, B1)
 
 if isEntrou == False:
     print('Instância informada não existe!')
